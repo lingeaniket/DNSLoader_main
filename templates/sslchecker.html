@@ -1,0 +1,263 @@
+{%extends 'tools-template.html' %}
+
+<!-- Title Block -->
+{%block title%}
+<meta
+    name="description"
+    content="Use our SSL Checker to quickly verify the status of your SSL certificate. Maintain user and search engine confidence by making sure your website is secure and that SSL is installed."
+/>
+<meta
+    name="keywords"
+    content=" Website security, SSL status, SSL installation, HTTPS verification, secure connection, SSL checker, SSL certificate check, and SSL"
+/>
+<title>SSL Checker | DNSLoader</title>
+{%include "headlink.html"%}{%endblock%}
+
+<!-- Form Block -->
+{%block form %}
+<h2 class=""><span>SSL</span> Checker</h2>
+<div class="">
+    <div class="search-container slide-up">
+        <form action="{{url_for('getsslchecker')}}" method="POSt">
+            <input
+                type="text"
+                value="{{result.query if result.query else ''}}"
+                placeholder="Enter domain"
+                name="host"
+                class="search-input"
+            />
+            <button type="submit" class="search-button">Check SSL</button>
+        </form>
+    </div>
+</div>
+{%endblock%}
+
+<!-- Response Table -->
+{%block res_table%} {%if result.certificate%}
+<section id="table" class="table">
+    <div class="table-contant-n">
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th colspan="3">Test Information</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="width: 100px">
+                        <div class="B-icon">
+                            <i style="color: green" class="bi bi-globe-americas"></i>
+                        </div>
+                    </td>
+                    <td style="width: 200px">Tested URL</td>
+                    <td>{{result.query}}</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="B-icon">
+                            <i style="color: green" class="bi bi-clock"></i>
+                        </div>
+                    </td>
+                    <td>Test Completed</td>
+                    <td>{{result.certificate.timeofcompletion}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="table-contant-n">
+        <table class="styled-table">
+            <thead>
+                {%if result.certificate.domain_matching_error or result.certificate.domain_error%}
+                <tr style="background-color: brown">
+                    <th colspan="3">SSL Connection - Error</th>
+                </tr>
+                {%else%}
+                <tr>
+                    <th colspan="3">SSL Connection - Pass</th>
+                </tr>
+                {%endif%}
+            </thead>
+            {%if result.certificate.domain_error%}
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="B-icon">{%include "cross_icon.html"%}</div>
+                    </td>
+                    <td colspan="2">
+                        The SSL certificate tests failed. Please be sure that you can connect to your site over SSL and try again..
+                    </td>
+                </tr>
+            </tbody>
+            {%else%}
+
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="B-icon">
+                            <i style="color: green" class="bi bi-info-circle"></i>
+                        </div>
+                    </td>
+                    <td>SSL Certificate Info</td>
+                    <td>
+                        <div style="display: flex; width: 100%; gap: 10px">
+                            <div style="width: 160px; text-align: right; white-space: nowrap">
+                                <b> Certificate Issuer </b>
+                            </div>
+                            <div>{{result.certificate.issuer.organization}}</div>
+                        </div>
+                        <div style="display: flex; width: 100%; gap: 10px">
+                            <div style="width: 160px; text-align: right; white-space: nowrap">
+                                <b> Certificate Type </b>
+                            </div>
+                            <div>{{result.certificate.issuer.common_name}}</div>
+                        </div>
+                        <div style="display: flex; width: 100%; gap: 10px">
+                            <div style="width: 160px; text-align: right; white-space: nowrap">
+                                <b> Issued On </b>
+                            </div>
+                            <div>{{result.certificate.valid_from}}</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="B-icon">
+                            {%if result.certificate.https_forced%} {%include "check_icon.html"%} {%else%}
+                            <div class="B-icon">
+                                <i class="bi bi-exclamation-octagon-fill"></i>
+                            </div>
+                            {%endif%}
+                        </div>
+                    </td>
+                    <td>Force HTTPS</td>
+                    <td>Your webserver is{{ ' ' if result.certificate.https_forced else ' not '}}forcing the use of SSL.</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="B-icon">
+                            {%if result.certificate.certificate_valid%} {%include "check_icon.html"%} {%else%} {%include "cross_icon.html"%}
+                            {%endif%}
+                        </div>
+                    </td>
+                    <td>Valid Certificate</td>
+                    <td>Your SSL Certificate is{{ ' ' if result.certificate.certificate_valid else ' not '}}installled correctly.</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="B-icon">
+                            {%if result.certificate.domain_matching_error%} {%include "cross_icon.html"%} {%else%} {%include
+                            "check_icon.html"%} {%endif%}
+                        </div>
+                    </td>
+                    <td>Domain Matching</td>
+                    <td>
+                        {%if result.certificate.domain_matching_error%}
+                        <div>Your SSL certificate does not match your domain name!</div>
+
+                        {%else%}
+                        <div>Your SSL Certificate matches your domain name!</div>
+                        {%endif%}
+                        <div>
+                            <b>Protected Domains</b>
+                        </div>
+                        <div style="padding-left: 50px">
+                            {%if result.certificate.subject_alt_name.__len__() >= 10%}
+                            <div style="display: flex; justify-content: space-between; width: 100%; flex-wrap: wrap">
+                                {%for domain in result.certificate.subject_alt_name%}
+                                <div class="ssl-domain">{{domain}}</div>
+                                {% endfor %}
+                            </div>
+                            {%else%}
+                            <div>
+                                {%for domain in result.certificate.subject_alt_name%}
+
+                                <div>{{domain}}</div>
+                                {% endfor %}
+                            </div>
+                            {%endif%}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="B-icon">
+                            {%if result.certificate.outdated_tls%}
+                            <div class="B-icon">
+                                <i class="bi bi-exclamation-octagon-fill"></i>
+                            </div>
+                            {%else%} {%include "check_icon.html"%} {%endif%}
+                        </div>
+                    </td>
+                    <td>Signature</td>
+                    <td>Your SSL certificate is using a {{result.certificate.signature_algorithm}} signature!</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="B-icon">
+                            {%if result.certificate.is_expired%}
+                            <div class="B-icon">
+                                <i class="bi bi-exclamation-octagon-fill"></i>
+                            </div>
+                            {%else%} {%include "check_icon.html"%} {%endif%}
+                        </div>
+                    </td>
+                    <td>Expiration</td>
+                    <td>
+                        {%if result.certificate.is_expired %}
+                        <div>Your SSL Certificate is expired on {{result.certificate.valid_until}}</div>
+                        {% else %}
+                        <div>
+                            Your SSL Certificate is current .Your SSl certificate expires in {{result.certificate.days_until_expiration}}
+                            days. ({{result.certificate.valid_until}})
+                        </div>
+                        {%endif%}
+                    </td>
+                </tr>
+                {%if result.certificate.outdated_tls%}
+                <tr>
+                    <td>
+                        <div class="B-icon">{%include "cross_icon.html"%}</div>
+                    </td>
+                    <td>Outdated TLS</td>
+                    <td>
+                        <div>You currently have {{result.certicate.protocol}} enabled.</div>
+                        <div>
+                            This version of TLS is being phased out. This warning won't break your padlock, however if you run an eCommerce
+                            site, PCI requirements state that TLSv1 must be disabled by June 30, 2018.
+                        </div>
+                    </td>
+                </tr>
+                {%endif%}
+            </tbody>
+            {%endif%}
+        </table>
+    </div>
+</section>
+{%elif result.error%}
+<section class="table">
+    <h4 class="error-message">{{result.error}}</h4>
+</section>
+{%endif%} {%endblock%}
+
+<!-- About Block -->
+{%block about%} {%if not result.certificate and not result.error%}
+<section id="about" class="about section">
+    <div class="container" data-aos="fade-up">
+        <div class="row gx-0">
+            <div class="col-lg-12 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
+                <div class="content">
+                    <h2>About SSL Checker</h2>
+                    <p>
+                        Utilize our efficient SSL Checker to swiftly identify any issues with your SSL certificate setup. This tool allows
+                        you to confirm that your SSL certificate is properly installed, valid, and trusted, ensuring a seamless experience
+                        for your users without any security warnings. Simply enter your server's public hostname (note that internal
+                        hostnames aren't supported) in the field below and hit 'Check SSL'. Our SSL Checker will handle the rest. If you're
+                        in need of an SSL certificate, we've got you covered.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{%endif%} {%endblock%}

@@ -1,0 +1,218 @@
+{%extends 'dashboard-template.html' %}
+<!-- Title Block -->
+{%block title %}
+<meta content="" name="description" />
+<meta content="" name="keywords" />
+<title>IP Group - DNSLoader</title>
+{%endblock%}
+
+<!-- Sidebar Block -->
+{%block sidebar %}
+<!-- Set Values -->
+{%set tab="ipgroup"%} {%set isLoggedIn=True%} {%set fullname=result.fullname%} {%set username=result.username%}
+<!-- Include sidebar -->
+{%include "dashboard/profile_sidebar.html"%} {%endblock%}
+
+<!-- Main Block -->
+{%block main %}
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">IP Group</h5>
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Group ID</th>
+                                <th>Group Name</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%if result%} {%for group in result.group%}
+                            <tr>
+                                <td>{{group[0]}}</td>
+                                <td>{{group[1]}}</td>
+                                <td>
+                                    <button
+                                        type="button"
+                                        class="search-button1"
+                                        onclick="editGroup('{{group[1]}}')"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editModal"
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="search-button1"
+                                        onclick="deleteGroup('{{group[0]}}')"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal"
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            {%endfor%} {%endif%}
+                        </tbody>
+                    </table>
+                    <!-- End Dark Table -->
+                    <div class="login-b">
+                        <button type="button" class="search-button1" data-bs-toggle="modal" data-bs-target="#loginModal">Add Group</button>
+                    </div>
+
+                    <!-- Modal -->
+                    <div
+                        class="modal fade"
+                        id="loginModal"
+                        data-bs-backdrop="static"
+                        data-bs-keyboard="false"
+                        tabindex="-1"
+                        aria-labelledby="staticBackdropLabel"
+                        aria-hidden="true"
+                    >
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form action="{{url_for('dashboard_ipgroup')}}" method="post">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title d-flex align-items-center">
+                                            <i class="bi bi-person-circle fs-3 me-2"></i>Add Group
+                                        </h5>
+                                        <button type="reset" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label class="form-label">Add Group</label>
+                                            <input type="text" name="group_name" class="form-control shadow-none" />
+                                        </div>
+                                        <div class="login-b">
+                                            <button
+                                                type="submit"
+                                                class="search-button1"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#loginModal"
+                                            >
+                                                Add Group
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- edit group -->
+                    <div
+                        class="modal fade"
+                        id="editModal"
+                        data-bs-backdrop="static"
+                        data-bs-keyboard="false"
+                        tabindex="-1"
+                        aria-labelledby="staticBackdropLabel"
+                        aria-hidden="true"
+                    >
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form action="{{url_for('update_ipgroup')}}" method="post" id="editModal">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title d-flex align-items-center">
+                                            <i class="bi bi-person-circle fs-3 me-2"></i>Edit Group
+                                        </h5>
+                                        <button type="reset" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <div>
+                                                <label class="form-label">Edit Group</label>
+                                                <input type="text" id="old_name" name="old_name" style="display: none" />
+                                                <input type="text" id="new_name" name="new_name" />
+                                            </div>
+                                        </div>
+                                        <div class="login-b">
+                                            <button type="submit" class="search-button1" data-bs-toggle="modal" data-bs-target="#editModal">
+                                                Save Group Name
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- delete group name -->
+                    <div
+                        class="modal fade"
+                        id="deleteModal"
+                        data-bs-backdrop="static"
+                        data-bs-keyboard="false"
+                        tabindex="-1"
+                        aria-labelledby="staticBackdropLabel"
+                        aria-hidden="true"
+                    >
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form action="{{url_for('delete_ipgroup')}}" method="post">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title d-flex align-items-center">
+                                            <i class="bi bi-person-circle fs-3 me-2"></i>Delete Group
+                                        </h5>
+                                        <button type="reset" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- input function -->
+                                        <input
+                                            type="text"
+                                            id="delete_group"
+                                            name="delete_group"
+                                            class="form-control shadow-none"
+                                            style="display: none"
+                                        />
+
+                                        <div class="login-b">
+                                            <button
+                                                type="submit"
+                                                class="search-button1"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal"
+                                            >
+                                                Yes
+                                            </button>
+                                            <button
+                                                style="margin-left: 20px"
+                                                type="reset"
+                                                class="search-button1"
+                                                data-bs-dismiss="modal"
+                                                aria-label="Close"
+                                            >
+                                                No
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{%endblock%}
+
+<!-- Scripts for Page -->
+{%block script_down%}
+<script>
+    function editGroup(group) {
+        let oldElement = document.getElementById("old_name");
+        oldElement.value = group;
+        let newElement = document.getElementById("new_name");
+        newElement.value = group;
+    }
+    function deleteGroup(group) {
+        let deleteElement = document.getElementById("delete_group");
+        deleteElement.value = group;
+    }
+</script>
+{%endblock%}

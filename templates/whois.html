@@ -1,0 +1,115 @@
+{%extends 'tools-template.html' %}
+
+<!-- Title block -->
+{%block title%}
+<meta
+    name="description"
+    content="Utilize WHOIS Lookup to access comprehensive information about domain registration, confirm ownership, and promote transparency regarding domains. Review WHOIS records to quickly discover crucial details about any domain."
+/>
+<meta
+    name="keywords"
+    content="WHOIS query, domain WHOIS verification, details on domain registration, information about domain ownership, WHOIS documentation, domain openness, WHOIS inquiry tool"
+/>
+<title>Whois Lookup | DNSLoader</title>
+{% include 'headlink.html'%}
+<script src="/static/js/scripts/whois.js"></script>
+{%endblock%}
+
+<!-- Form BLock -->
+{%block form %}
+<h2 data-aos="fade-up" data-aos-delay="100" class=""><span>Who</span>is Lookup</h2>
+<div data-aos="fade-up" data-aos-delay="300" class="">
+    <div class="search-container">
+        <form action="{{ url_for('whoisfetch') }}" method="POST">
+            <input
+                type="text"
+                placeholder="Search..."
+                name="domain"
+                id="domain"
+                value="{{ result.domain if result.domain else '' }}"
+                class="search-input"
+            />
+            <button type="submit" id="submit" class="search-button">Search</button>
+            <div id="loader" class="loader"></div>
+        </form>
+        <div id="error-message"></div>
+    </div>
+</div>
+{%endblock%}
+
+<!-- Response Table -->
+{%block res_table%} {% if result.domain %}
+<section id="table" class="table">
+    <div class="table-contant">
+        <h4>{{result.ip}}</h4>
+    </div>
+    {%if result.error%}
+    <h4 class="error-message">{{result.error}}</h4>
+    {%elif result.domain %}
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if result.domain %} {% for data in result.row%}
+            <tr>
+                <td>{{data.name}}</td>
+                <td>
+                    {% if data.isList%} {% for inTab in data.value %}
+                    <p class="table-ns">{{inTab}}</p>
+                    {%endfor%} {%else%} {{data.value}} {%endif%}
+                </td>
+            </tr>
+            {% endfor %} {% endif %}
+        </tbody>
+    </table>
+    <div style="padding: 30px; margin-top: 30px">
+        <h3>Whois Raw Data</h3>
+        <div style="padding: 5px; border: 1px solid #4154f1; border-radius: 8px; background-color: #f3f3f3">
+            {% if result["raw"] %}
+            <pre style="white-space: normal; background-color: transparent">
+                 {% for data in result["raw"] %}
+                     {%if data.isList%}
+                         {%if data.key in ["updated_date","expiration_date","creation_date"] %}
+                             {{data.name}}:{{data.value[0]}}
+                         {%else%}
+                             {%for record in data.value | unique%}
+                                 {{data.name}}:{{record | lower()}}<br>
+                             {% endfor %}
+                         {%endif%}
+                     {%else%}
+                         {{data.name}}:{{data.value}}
+                     {%endif%}<br>
+                 {% endfor %}
+             </pre>
+            {%endif%}
+        </div>
+    </div>
+    {%endif%}
+</section>
+{% endif %} {%endblock%}
+
+<!-- About Section -->
+{%block about %} {%if not result.domain%}
+<section id="about" class="about section">
+    <div class="container" data-aos="fade-up">
+        <div class="row gx-0">
+            <div class="col-lg-12 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
+                <div class="content">
+                    <h2>About Whois Lookup</h2>
+                    <p>
+                        Whois Lookup provides detailed registration information for a domain, including the owner’s contact details,
+                        registrar data, and domain status. By using Whois Lookup, you can quickly identify the registrant of a domain and
+                        check the registration and expiration dates. This tool also helps in domain dispute resolution and ensures
+                        transparency in domain ownership. Additionally, you can verify the accuracy of the data provided by the domain's
+                        registrar, making Whois Lookup an essential tool for domain management.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{%endif%} {%endblock%}

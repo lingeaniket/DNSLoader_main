@@ -1,0 +1,74 @@
+<div
+    class="modal fade"
+    id="loginModal"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="{{url_for('ips_add_range')}}" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title d-flex align-items-center"><i class="bi bi-person-circle fs-3 me-2"></i>Add IP</h5>
+                    <button type="reset" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <button name="range" class="modal-button search-button1" disabled onclick="showComponent(this)">Range</button>
+                        <button name="custom" class="modal-button search-button1" onclick="showComponent(this)">Custom</button>
+                        <button name="file-input" class="modal-button search-button1" onclick="showComponent(this)">File</button>
+                    </div>
+
+                    <div class="component" id="range">
+                        <div>
+                            <label for="ips1"
+                                >Start IP:
+
+                                <input type="text" name="ips1" required />
+                            </label>
+                        </div>
+                        <div>
+                            <label for="ips2">End IP:</label>
+                            <input type="text" name="ips2" />
+                        </div>
+                        <!-- comment -->
+                        <div>
+                            <label for="comments">Comments:</label>
+                            <input type="text" name="comments" />
+                        </div>
+                    </div>
+                    <div class="component" id="custom" style="display: none; margin: 10px">
+                        <textarea name="ips" rows="10" cols="30"></textarea>
+
+                        <p>
+                            After the '//' sign, comments can be added.<br />
+                            For example:8.8.8.8//google
+                        </p>
+                    </div>
+                    <div class="component" id="file-input" style="display: none; margin: 10px">
+                        <label for="file">Choose file to upload</label>
+                        <input type="file" name="file" id="file" />
+
+                        <p>Your csv file must contain "IP" column</p>
+                    </div>
+                    <div style="margin: 10px">
+                        <select name="ipgroup" required>
+                            <option value="--select">Select IP Group</option>
+                            {%for group in result.ip_group%}
+                            <option value="{{group.id}}">{{group.name}}</option>
+                            {%endfor%}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="login-b">
+                    <button type="submit" class="search-button1 mb-3" data-bs-toggle="modal" data-bs-target="#loginModal">
+                        Add IP address
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

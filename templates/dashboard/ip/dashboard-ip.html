@@ -1,0 +1,91 @@
+{%extends 'dashboard-template.html' %}
+
+<!-- Title Block -->
+{%block title %}
+<title>User Ips</title>
+<meta content="" name="description" />
+<meta content="" name="keywords" />
+
+{%endblock%} {%block sidebar %} {%set tab="ip"%} {%set isLoggedIn=True%}{%set fullname=result.fullname%} {%set username=result.username%}
+<!-- Include sidebar -->
+{%include "dashboard/profile_sidebar.html"%}
+
+
+
+{%endblock%}
+
+<!-- Main Block -->
+{%block main %}
+<section class="section dashboard">
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">IP Table</h5>
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Sr. No</th>
+                                <th>IP</th>
+                                <th>Status</th>
+                                <th>RDNS</th>
+                                <th>Comments</th>
+                                <th>IP Group</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%if result%} {%for ip in result.Ips %}
+                            <tr>
+                                <td>{{ip[0]}}</td>
+                                <td>{{ip[1]}}</td>
+                                <td id="{{ip[1]}}-01">{{ip[3]}}</td>
+                                <td id="{{ip[1]}}-02">{{ip[4]}}</td>
+                                <td>{{ip[5]}}</td>
+                                <td>{{ip[9]}}</td>
+                                <td>
+                                    <button
+                                        type="button"
+                                        class="search-button1"
+                                        onclick="editIP('{{ip[1]}}'+'|'+'{{ip[5]}}')"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editModal"
+                                    >
+                                        Edit
+                                    </button>
+                                </td>
+                            </tr>
+                            {%endfor%} {%endif%}
+                        </tbody>
+                    </table>
+                    <div class="login-b">
+                        <button type="button" class="search-button1" data-bs-toggle="modal" data-bs-target="#loginModal">
+                            Add IP address
+                        </button>
+                        <div style="margin-left: 15px">
+                            <form onsubmit="callFetch(event)">
+                                <button class="search-button1" type="submit">Fetch</button>
+                            </form> 
+                        </div>
+                        <div style="margin-left: 15px">
+                            <form action="{{url_for('fetch_rdns')}}" method="get">
+                                <button class="search-button1" type="submit">Fetch RDNS</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Add Modal -->
+                    {%include 'dashboard/ip/ip-add-modal.html' %}
+                    <!-- Edit Modal -->
+                    {%include 'dashboard/ip/ip-edit-modal.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{%endblock%}
+
+<!-- Scripts Block -->
+{%block script_down%}
+<script src="/static/js/scripts/dashboard/ip/dashboard-ip.js"></script>
+{%endblock%}

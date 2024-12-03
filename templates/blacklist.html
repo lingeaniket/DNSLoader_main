@@ -1,0 +1,120 @@
+{%extends 'tools-template.html'%}
+
+<!-- Title of page -->
+{%block title%}
+<title>BlackList Check | DNSLoader</title>
+<meta
+    name="description"
+    content="Verify whether your domain or IP is listed on a blacklist using our Blacklist Lookup tool. Quickly detect any blacklisting problems to safeguard your email deliverability and maintain your online reputation."
+/>
+<meta
+    name="keywords"
+    content="Blacklist search, IP blacklist verification, domain blacklist verification, email deliverability assessment, online reputation evaluation, blacklist condition, blacklist elimination."
+/>
+{% include 'headlink.html'%} {%endblock%}
+
+<!-- Script of page -->
+{%block script%}
+<script src="/static/js/scripts/blacklist.js"></script>
+{%endblock%}
+
+<!-- Form of the page -->
+{%block form%}
+<h2 data-aos="fade-up" data-aos-delay="0" class=""><span>Black</span>List</h2>
+<div data-aos="fade-up" data-aos-delay="0" class="">
+    <div class="search-container">
+        <form action="{{ url_for('blacklist') }}" method="POST">
+            <input
+                type="text"
+                placeholder="Search..."
+                value="{{ result.query if result.query else '' }}"
+                name="ip"
+                id="ip"
+                class="search-input"
+            />
+            <button type="submit" id="submit" class="search-button">Search</button>
+            <div id="loader" class="loader"></div>
+        </form>
+        <div id="error-message"></div>
+    </div>
+</div>
+{%endblock%}
+
+<!-- Response Table -->
+{%block res_table%} {% if result.query %}
+<section id="table" class="table">
+    <div class="table-contant">
+        <div class="table-contant">
+            {% if result.query %}
+            <h4>Blacklisted Results for <b>{{result.query}}</b></h4>
+            {% endif %}
+        </div>
+    </div>
+    {%if result.error %}
+    <h4 class="error-message">{{result.error}}</h4>
+    {%elif result.result%}
+    <div style="margin-bottom: 20px">
+        <table class="styled-table">
+            <tbody>
+                <tr>
+                    <td>Analysis Date</td>
+                    <td>{{result.result.date}}</td>
+                </tr>
+                <tr>
+                    <td>Time Elapsed</td>
+                    <td>{{result.result.time_elapsed}} seconds</td>
+                </tr>
+                <tr>
+                    <td>Detections Count</td>
+                    <td>{{result.result.detected_on.__len__()}}/{{result.result.providers.__len__()}}</td>
+                </tr>
+                <tr>
+                    <td>Ip Address</td>
+                    <td>{{result.result.hostname}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Blacklist</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for provider in result.result.providers %}
+            <tr>
+                <td>
+                    {% if provider in result.result.detected_on%} {%include "cross_icon.html"%} {%else%} {%include "check_icon.html"%}
+                    {%endif%}
+                </td>
+                <td>{{provider}}</td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+    {% endif%}
+</section>
+{%endif%} {%endblock%}
+
+<!-- About section -->
+{%block about%} {%if not result.query %}
+<section id="about" class="about section">
+    <div class="container" data-aos="fade-up">
+        <div class="row gx-0">
+            <div class="col-lg-12 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
+                <div class="content">
+                    <h2>About Blacklist</h2>
+                    <p>
+                        The blacklist check compares the IP address of a mail server to more than 70 DNS-based email blacklists. (Usually
+                        referred to as RBL, DNSBL, or Realtime Blacklist). Certain emails you send could not be delivered if your mail
+                        server has been blocked. Blacklists of emails are a popular method of lowering spam. Start with an MX Lookup if you
+                        are unsure of the address of your mail server. Alternatively, just send contact@dnsloader.com an email.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{%endif%} {%endblock%}

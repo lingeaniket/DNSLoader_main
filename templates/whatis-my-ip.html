@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <meta
+            name="description"
+            content="Use our 'What is My IP' tool to quickly find your public IP address. Find comprehensive IP information for internet security, location verification, and network problems."
+        />
+        <meta
+            name="keywords"
+            content="IP information, network issues, IP address lookup, IP address location, public IP check, and what is my IP"
+        />
+        <title>Whatis MY IP | DNSLoader</title>
+        {% include 'headlink.html'%}
+        <script src="/static/js/scripts/whatismyip.js"></script>
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    </head>
+
+    <body class="index-page">
+        {% include "header.html" %}
+        <main class="main">
+            <!-- Hero Section -->
+            <section id="hero" class="hero section">
+                <div class="container d-flex flex-column align-items-center">
+                    <h2 data-aos="fade-up" data-aos-delay="100" class=""><span>Whatis</span> MY IP</h2>
+                </div>
+            </section>
+            <!-- /Hero Section -->
+
+            <!-- About Section -->
+            <div id="whatismyipdata" style="position: relative">
+                <div id="loader" class="loader"></div>
+            </div>
+        </main>
+
+        <section id="about" class="about section">
+            <div class="container" data-aos="fade-up">
+                <div class="row gx-0">
+                    <div class="col-lg-12 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
+                        <div class="content">
+                            <h2>About Whatis My IP</h2>
+                            <p>
+                                The 'What is My IP' tool instantly displays your public IP address, which is essential for identifying your
+                                device on the internet. This service helps you determine your IP address, whether you're troubleshooting
+                                network issues, configuring remote access, or checking geolocation data. With 'What is My IP,' you can also
+                                verify if your IP is static or dynamic, providing critical information for network security and management.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Scroll Top -->
+        <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"
+            ><i class="bi bi-arrow-up-short"></i
+        ></a>
+
+        {% include "footer.html" %} {%include "scripts.html" %}
+    </body>
+</html>

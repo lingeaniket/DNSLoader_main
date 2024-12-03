@@ -1,0 +1,15 @@
+requests
+whatismyip
+dnspython
+geocoder
+Flask
+Gunicorn
+python-whois
+whois
+pyOpenSSL
+bcrypt
+flask_mysqldb
+flask_session
+python-dotenv
+pandas
+flask_mail

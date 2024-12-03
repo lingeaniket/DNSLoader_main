@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    {% if result.is_verified%}
+    <form action="{{url_for('dashboard_profile')}}">
+
+        <h2>
+
+            Your email is verified, go to dashboard
+        </h2>
+        <button type="submit">go to dashboard</button>
+    </form>
+    {% else %}
+    <form action="{{url_for('regenerate_email_verification')}}" method="post">
+
+        <input type="text" name="email" style="display: none;" value="{{result.email}}">
+
+        <h2>
+            your link is expired,go to login
+        </h2>
+        <button type="submit">Go to login</button>
+    </form>
+
+    {% endif %}
+</body>
+
+</html>

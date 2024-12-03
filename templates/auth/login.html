@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <title>Login</title>
+        {% include 'headlink.html'%}
+    </head>
+    <body class="index-page">
+        {%set isLoggedIn=False%} {%include 'dashboard/profile_sidebar.html'%}
+        <main class="main">
+            <!-- Hero Section -->
+            <section id="hero" class="hero section">
+                <div class="container d-flex flex-column align-items-center slide-up">
+                    <form id="loginForm" class="mx-auto border p-5 bg-white mt-4 rounded" method="post" action="{{url_for('login')}}">
+                        <h2 class=""><span>Log</span>in</h2>
+                        <div class="mb-3">
+                            <label for="loginUsernameEmail" class="form-label">Username or Email</label>
+                            <input type="text" class="form-control" name="username" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="loginPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" name="password" required />
+                        </div>
+                        {%if result%} {{result.error}} {%endif%}
+                        <div class="login-b">
+                            <button type="submit" class="search-button1">Login</button>
+                        </div>
+                        <div class="mt-2 d-flex justify-content-center">
+                            Not registered?<a class="ms-2" href="{{url_for('registration')}}"> Create account</a>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </main>
+        <!-- Scroll Top -->
+        <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
+            <i class="bi bi-arrow-up-short"></i>
+        </a>
+        {%include "footer.html"%}
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const elements = document.querySelectorAll(".slide-up"); // Select elements with 'slide-up' class
+                const observer = new IntersectionObserver(
+                    (entries, observer) => {
+                        entries.forEach((entry) => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add("active"); // Add 'active' class when element is in view
+                                observer.unobserve(entry.target); // Stop observing once the element is revealed
+                            }
+                        });
+                    },
+                    {
+                        threshold: 0.1, // Trigger when 10% of the element is visible
+                    },
+                );
+
+                elements.forEach((element) => {
+                    observer.observe(element); // Start observing each element
+                });
+            });
+        </script>
+        {%include 'scripts.html'%}
+    </body>
+</html>

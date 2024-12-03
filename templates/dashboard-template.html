@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <meta name="google-site-verification" content="KT1vYcx6FizmYDtY8Xa0-5Vx5zyz1jCJ4rfW_ylOPZA" />
+        {%block title %} {%endblock%}
+        <!-- Include headlink file -->
+        {%include "headlink.html"%}
+        <link rel="stylesheet" href="/static/css/dash-table.css" />
+        <style>
+            .spinner {
+                border: 3px solid #f3f3f3; /* Light grey */
+                border-top: 3px solid #840000; /* Blue */
+                border-radius: 50%;
+                width: 20px;
+                height: 20px;
+                animation: spin 2s linear infinite;
+            }
+
+            @keyframes spin {
+                0% {
+                    transform: rotate(0deg);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+        </style>
+    </head>
+    <body>
+        {%block sidebar %}{%endblock%}
+        <!-- Set Values -->
+
+        <main id="main" class="main">{%block main%}{%endblock%}</main>
+        <!-- End #main -->
+        <!-- ======= Footer ======= -->
+        <div id="footer1">{%include "footer.html"%}</div>
+        <!-- Scripts -->
+        {%include "scripts.html"%}
+        <!-- Scripts Block -->
+        {%block script_down%} {%endblock%}
+    </body>
+</html>

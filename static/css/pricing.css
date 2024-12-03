@@ -1,0 +1,108 @@
+.pricing-table {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.plans-container {
+    margin-top: 35px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.plan {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    border: 2px solid #ddd;
+    transition: box-shadow 0.3s ease-in-out, border 0.3s ease-in-out;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.plan:hover {
+    /* transform: translateY(-10px); */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border-color: #012970;
+}
+
+.plan .badge {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #012970;
+    color: #fff;
+    font-size: 18px;
+    padding: 8px 18px;
+    border-radius: 50px;
+}
+
+.plan.highlighted .badge {
+    background: #4a90e2;
+}
+
+.plan h3 {
+    margin: 20px 0;
+    font-size: 1.5rem;
+}
+
+.plan .price {
+    font-size: 2rem;
+    color: #444;
+    margin: 10px 0;
+}
+
+.plan .price span {
+    font-size: 1rem;
+    color: #777;
+}
+
+.plan ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.plan ul li {
+    display: flex;
+    align-items: center;
+    text-align: left;
+    padding-left: 22px;
+    margin: 3px 0;
+    color: #012970;
+    font-size: 16px;
+}
+
+.plan ul li i {
+    flex-shrink: 0;
+    margin-right: 10px;
+    color: #0055cc;
+    font-size: 19px;
+}
+
+.plan .btn {
+    padding: 10px 77px;
+    font-size: 1rem;
+    color: #fff;
+    background: #4154f1;
+    border: none;
+    border-radius: 22px;
+    cursor: pointer;
+}
+
+.plan .btn:hover {
+    background: #0055cc;
+    color: #fff;
+}
+
+.pricing-title {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}

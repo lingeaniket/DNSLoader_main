@@ -1,0 +1,100 @@
+{%extends 'tools-template.html'%}
+<!-- Title of page -->
+{%block title%}
+<title>RDNS Lookup | DNSLoader</title>
+<meta
+    name="description"
+    content="To find domain names linked to IP addresses, run a Reverse DNS (RDNS) Lookup. Accurate RDNS mapping improves email deliverability and fortifies security."
+/>
+<meta
+    name="keywords"
+    content="IP address lookup, domain verification, network security, email deliverability, reverse DNS mapping, RDNS lookup, and reverse DNS check"
+/>
+{% include 'headlink.html'%} {%endblock%}
+
+<!-- Script of page -->
+{%block script%}
+<script src="/static/js/scripts/rdnslookup.js"></script>
+{%endblock%}
+
+<!-- Form of Page -->
+{%block form%}
+<h2 data-aos="fade-up" data-aos-delay="100" class=""><span>R</span>DNS Lookup</h2>
+<div data-aos="fade-up" data-aos-delay="300" class="">
+    <div class="search-container">
+        <form action="{{url_for('rdnslookup')}}" method="post">
+            <input
+                type="text"
+                placeholder="Search..."
+                name="ip"
+                id="ip"
+                value="{{ result.ip if result.ip else '' }}"
+                class="search-input"
+            />
+            <button type="submit" id="submit" class="search-button">Search</button>
+            <div id="loader" class="loader"></div>
+        </form>
+        <div id="error-message"></div>
+    </div>
+</div>
+{%endblock%}
+
+<!-- Response Table -->
+{%block res_table%} {%if result.ip%}
+<section id="table" class="table">
+    <div class="table-contant">
+        {%if result.ip%}
+        <h4>Result for IP {{result.ip}}</h4>
+        {%endif%}
+    </div>
+    {%if result.error %}
+    <h4 class="error-message">{{result.error}}</h4>
+    {% elif result.ip %}
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>IP Address</th>
+                <th>Host Name</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if result.ip %}
+            <tr>
+                <td>{{result.ip}}</td>
+                <td>{{result.result}}</td>
+                <td>
+                    <form action="{{url_for('blacklist')}}" method="post">
+                        <input type="text" name="ip" value="{{result.ip}}" style="display: none" />
+                        <button class="search-button-in" type="submit">blacklist check</button>
+                    </form>
+                </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+    {% endif%}
+</section>
+{% endif%} {%endblock%}
+
+<!-- About Section -->
+{%block about%} {%if not result.ip%}
+<section id="about" class="about section">
+    <div class="container" data-aos="fade-up">
+        <div class="row gx-0">
+            <div class="col-lg-12 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
+                <div class="content">
+                    <h2>About RDNS</h2>
+                    <p>
+                        The RDNS (Reverse DNS) Lookup tool helps you determine the domain name associated with an IP address by performing a
+                        reverse DNS query. This is essential for verifying email server configurations, ensuring proper domain-IP mapping,
+                        and enhancing security. By using RDNS Lookup, you can quickly troubleshoot issues related to email deliverability
+                        and confirm that your server's IP address resolves to a valid domain name, contributing to trust and credibility in
+                        online communications.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{%endif%} {%endblock%}

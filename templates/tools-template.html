@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <meta name="google-site-verification" content="KT1vYcx6FizmYDtY8Xa0-5Vx5zyz1jCJ4rfW_ylOPZA" />
+        <!-- Title Block -->
+        {%block title%} {%endblock%}
+        <!-- Script Block -->
+        {%block script%}{%endblock%}
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    </head>
+    <body class="index-page">
+        {% include 'header.html' %}
+        <main class="main">
+            <!-- Hero Section -->
+            <section id="hero" class="hero section">
+                <div class="container d-flex flex-column align-items-center">
+                    <!-- Page Form -->
+                    {%block form%}{%endblock%}
+                </div>
+            </section>
+            <!-- Response Table -->
+            {%block res_table%} {%endblock%}
+        </main>
+        <!-- About Block -->
+        {%block about%}{%endblock%}
+
+        <!-- Scroll Top -->
+        <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
+            <i class="bi bi-arrow-up-short"></i>
+        </a>
+        <div
+            class="g-recaptcha"
+            data-callback="onSubmit"
+            data-size="invisible"
+            data-sitekey="6Lf1ZE4qAAAAAE-NSbeNBav3idxGjxYheBiFvlOk"
+        ></div>
+        <!-- Include footer file -->
+        {% include 'footer.html' %}
+        <!-- Add script if any -->
+        {%block end_script %}{%endblock%}
+        <!-- Include Script file -->
+        {% include "scripts.html"%}
+    </body>
+</html>
