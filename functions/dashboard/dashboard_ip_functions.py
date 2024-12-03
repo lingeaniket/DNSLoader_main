@@ -2,7 +2,7 @@ from concurrent.futures import ThreadPoolExecutor
 import datetime
 import socket
 
-from flask import session, request, redirect, url_for
+from flask import session, request, redirect, url_for, copy_current_request_context
 from flask_mysqldb import MySQL
 from functions.providers_data import providers_bulk
 from functions.mail.send_email import send_email_route
@@ -33,9 +33,30 @@ def get_ips_for_fetch_route():
     return {"ips": ips}
 
 
-# def fetch_ips_stream_route():
-#     def get_ips_results():
-#         ips = session.get("ips")
+def fetch_ips_stream_route():
+    
+    
+    user_id = session.get("user_id")
+    # initialize the cursor
+    mycursor = mysql.connection.cursor()
+    # execute the query, get ips of respected user, order by Updated_at as ascending and get first 100 results
+    mycursor.execute(
+        f"""SELECT * FROM tblips WHERE ownerid = {user_id} ORDER BY time(updated_at) LIMIT 100"""
+    )
+
+    # store them as non-updated ips
+    non_updated_ips = mycursor.fetchall()
+    # as non_updated_ips is list of each row as a structure of list, we have to get ip from list
+    # create new variable to store the ips
+    to_update_ips = []
+    # loop on each row, add ip to to_update_ips
+    for ip in non_updated_ips:
+        to_update_ips.append(ip[1])
+
+    # create a new variable to store result
+    row = []
+    # call the process_ips function, send ips list, row, and providers_bulk
+    return process_ips_ajax(to_update_ips, row, providers_bulk, "fetching")
 
 
 def fetch_ips_route():

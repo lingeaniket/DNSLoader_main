@@ -1,8 +1,13 @@
-function fetchips(){
-    const eventsource = new EventSource("/fetch-ips-stream")
-    eventsource.onmessage = function(){
-        
-    }
+function fetchips() {
+    const eventsource = new EventSource("/fetch-ips-stream");
+    eventsource.onmessage = function (event) {
+        console.log(event);
+    };
+
+    eventsource.onerror = function () {
+        console.error("Error occurred while streaming data");
+        eventsource.close(); // Close the connection
+    };
 }
 
 function callFetch(event) {
@@ -23,6 +28,7 @@ function callFetch(event) {
                 inSpinn.classList.add("spinner");
                 statusTd.appendChild(inSpinn);
             }
+            fetchips();
         });
 }
 
