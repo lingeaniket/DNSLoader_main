@@ -95,7 +95,7 @@ def process_ips_ajax(ip_list, row, providers_bulk, type):
 
         # convert that date to timestamp
         recent_date = date.strftime("%Y-%m-%d %H:%M:%S")
-        # if to_update_ips is not None or empty array
+        # if to_update_ips is not None or empty arra
         # if to_update_ips:
         mycursor.execute(
             f"""UPDATE tblips
