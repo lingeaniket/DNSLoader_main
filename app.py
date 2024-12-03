@@ -93,7 +93,7 @@ def blacklist():
 
 # @app.route("/bulk-blacklist", methods=["GET", "POST"])
 # def bulkblacklist():
-#     return bulkblacklist_route()
+#    
 
 
 @app.route("/whois-lookup", methods=["POST", "GET"])
