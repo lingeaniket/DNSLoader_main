@@ -23,19 +23,18 @@
                     <div class="d-flex justify-content-center">
                         <div class="component" id="range">
                             <div>
-                                <label for="ips1"
-                                    >Start IP:
-
-                                    <input type="text" name="ips1" required />
-                                </label>
+                                <label for="ips1">Start IP : <span class="text-danger">*</span></label
+                                ><br />
+                                <input type="text" name="ips1" class="me-3" required />
                             </div>
                             <div>
-                                <label for="ips2">End IP:</label>
-                                <input type="text" name="ips2" />
+                                <label for="ips2">End IP : <span class="text-danger">*</span></label
+                                ><br />
+                                <input type="text" name="ips2" required />
                             </div>
                             <!-- comment -->
                             <div>
-                                <label for="comments">Comments:</label>
+                                <label for="comments">Comments:</label><br />
                                 <input type="text" name="comments" />
                             </div>
                         </div>
@@ -54,8 +53,8 @@
 
                         <p>Your csv file must contain "IP" column</p>
                     </div>
-                    <div style="margin: 10px">
-                        <select name="ipgroup" required>
+                    <div class="d-flex justify-content-center">
+                        <select class="btn text-dark rounded-3 px-4 py-2 border" name="ipgroup" required>
                             <option value="--select">Select IP Group</option>
                             {%for group in result.ip_group%}
                             <option value="{{group.id}}">{{group.name}}</option>
