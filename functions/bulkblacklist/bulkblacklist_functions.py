@@ -84,25 +84,26 @@ def process_ips(ip_list, row, providers_bulk):
 def process_ips_ajax(ip_list, row, providers_bulk, type):
 
     user_id = session.get("user_id")
-    mycursor = mysql.connection.cursor()
 
     @copy_current_request_context
     def update_db(result):
         date = datetime.datetime.today()
-
-        # user_id = session.get("user_id")
-        # mycursor = mysql.connection.cursor()
-
-        # convert that date to timestamp
         recent_date = date.strftime("%Y-%m-%d %H:%M:%S")
-        # if to_update_ips is not None or empty arra
-        # if to_update_ips:
-        mycursor.execute(
-            f"""UPDATE tblips
-                                SET status='{"Blacklisted" if result["result"]["is_blacklisted"] else "Clean"}',
-                                updated_at='{recent_date}'
-                                WHERE ownerid='{user_id}' AND ipaddress='{result["ip"]}'"""
-        )
+
+        try:
+            with mysql.connection.cursor() as cursor:
+                query = """
+                    UPDATE tblips
+                    SET status = %s, updated_at = %s
+                    WHERE ownerid = %s AND ipaddress = %s
+                """
+                status = (
+                    "Blacklisted" if result["result"]["is_blacklisted"] else "Clean"
+                )
+                cursor.execute(query, (status, recent_date, user_id, result["ip"]))
+                mysql.connection.commit()
+        except mysql.OperationalError as e:
+            print(f"Database operation failed: {e}")
 
     count = {}
 
@@ -134,8 +135,8 @@ def process_ips_ajax(ip_list, row, providers_bulk, type):
                         "data": result,
                         "count": count,
                     }
-                    # if type == "fetching":
-                    update_db(result)
+                    if type == "fetching":
+                        update_db(result)
 
                     yield f"data: {json.dumps(newdata)}\n\n"
 

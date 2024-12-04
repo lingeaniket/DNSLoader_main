@@ -1,7 +1,9 @@
 function fetchips() {
     const eventsource = new EventSource("/fetch-ips-stream");
     eventsource.onmessage = function (event) {
-        console.log(event);
+        const { data } = JSON.parse(event.data);
+
+        console.log(data);
     };
 
     eventsource.onerror = function () {
