@@ -10,7 +10,10 @@
                 <div class="card values-card">
                     <div>
                         <h3>BlackList</h3>
-                        <p>The blacklist check compares the IP address of a mail server to more than 70 DNS-based email blacklists.</p>
+                        <p style="text-align: justify" class="fs-6 dns-tool">
+                            Verify if your IP or domain is blacklisted with the Blacklist tool. Protect your email deliverability and online
+                            reputation effectively.
+                        </p>
                     </div>
                     <!-- Search Box and Button -->
                     <form action="{{url_for('blacklist')}}" method="post">
@@ -26,7 +29,10 @@
                 <div class="card values-card">
                     <div>
                         <h3>DNS Lookup</h3>
-                        <p>DNS records for a domain will be listed in this test's priority order.</p>
+                        <p style="text-align: justify" class="fs-6 dns-tool">
+                            Resolve domain names to IP addresses with DNS Lookup. Enhance your network diagnostics and domain management
+                            effortlessly.
+                        </p>
                     </div>
                     <!-- Search Box and Button -->
                     <form action="{{url_for('dnslookup')}}" method="post">
@@ -42,7 +48,7 @@
                 <div class="card values-card">
                     <div>
                         <h3>RDNS</h3>
-                        <p>
+                        <p style="text-align: justify" class="fs-6 dns-tool">
                             The RDNS (Reverse DNS) Lookup tool helps you determine the domain name associated with an IP address by
                             performing a reverse DNS query
                         </p>
@@ -62,16 +68,15 @@
                 <div class="card values-card">
                     <div>
                         <h3>Bulk BlackList</h3>
-                        <p>
+                        <p style="text-align: justify" class="fs-6 dns-tool">
                             Monitor multiple IPs and domains for blacklisting with Bulk Blacklist. Safeguard your email deliverability and
                             domain reputation effortlessly.
                         </p>
                     </div>
                     <!-- Search Box and Button -->
                     <form action="{{url_for('bulkblacklist')}}" method="post">
-                        <div class="search-container">
-                            <input type="text" class="search-input" name="ip" placeholder="Search..." />
-                            <button type="submit" class="search-btn">Search</button>
+                        <div class="search-container d-flex justify-content-center">
+                            <button type="submit" class="search-btn">Go to Bulk Blacklist Checker</button>
                         </div>
                     </form>
                 </div>
@@ -81,7 +86,7 @@
                 <div class="card values-card">
                     <div>
                         <h3>Whois Lookup</h3>
-                        <p>
+                        <p style="text-align: justify" class="fs-6 dns-tool">
                             Get detailed domain registration and ownership information with WHOIS Lookup. Ensure transparency and security
                             in your online research.
                         </p>
@@ -100,7 +105,7 @@
                 <div class="card values-card">
                     <div>
                         <h3>SSL Cheacker</h3>
-                        <p>
+                        <p style="text-align: justify" class="fs-6 dns-tool">
                             Check the validity and security of your SSL certificates with SSL Checker. Ensure a safe and encrypted
                             connection for your website.
                         </p>
@@ -108,7 +113,7 @@
                     <!-- Search Box and Button -->
                     <form action="{{url_for('getsslchecker')}}" method="post">
                         <div class="search-container">
-                            <input type="text" class="search-input" name="ip" placeholder="Search..." />
+                            <input type="text" class="search-input" name="host" placeholder="Search..." />
                             <button type="submit" class="search-btn">Search</button>
                         </div>
                     </form>
