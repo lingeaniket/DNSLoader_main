@@ -7,11 +7,11 @@ import socket
 
 from typing import Tuple
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from flask import Response, session
-
+from flask import Response, session, copy_current_request_context
 from flask_mysqldb import MySQL
 
 mysql = MySQL()
+
 
 # from requests import Response
 from functions.blacklist.blacklist_functions import (
@@ -83,6 +83,28 @@ def process_ips(ip_list, row, providers_bulk):
 
 def process_ips_ajax(ip_list, row, providers_bulk, type):
 
+    user_id = session.get("user_id")
+
+    @copy_current_request_context
+    def update_db(result):
+        date = datetime.datetime.today()
+        recent_date = date.strftime("%Y-%m-%d %H:%M:%S")
+
+        try:
+            with mysql.connection.cursor() as cursor:
+                query = """
+                    UPDATE tblips
+                    SET status = %s, updated_at = %s
+                    WHERE ownerid = %s AND ipaddress = %s
+                """
+                status = (
+                    "Blacklisted" if result["result"]["is_blacklisted"] else "Clean"
+                )
+                cursor.execute(query, (status, recent_date, user_id, result["ip"]))
+                mysql.connection.commit()
+        except mysql.OperationalError as e:
+            print(f"Database operation failed: {e}")
+
     count = {}
 
     # map over each provider in providers_bulk
@@ -114,22 +136,8 @@ def process_ips_ajax(ip_list, row, providers_bulk, type):
                         "count": count,
                     }
                     if type == "fetching":
-                        date = datetime.datetime.today()
+                        update_db(result)
 
-                        user_id = session.get("user_id")
-                        mycursor = mysql.connection.cursor()
-
-                        # convert that date to timestamp
-                        recent_date = date.strftime("%Y-%m-%d %H:%M:%S")
-                        # if to_update_ips is not None or empty array
-                        # if to_update_ips:
-                        # execute the query
-                        mycursor.execute(
-                            f"""UPDATE tblips
-                                SET status='{"Blacklisted" if result["result"]["is_blacklisted"] else "Clean"}',
-                                updated_at='{recent_date}'
-                                WHERE ownerid='{user_id}' AND ipaddress='{result["ip"]}'"""
-                        )
                     yield f"data: {json.dumps(newdata)}\n\n"
 
     return Response(

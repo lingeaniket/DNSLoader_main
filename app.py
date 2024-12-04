@@ -36,7 +36,15 @@ from functions.dashboard.dashboard_ip import dashboard_ip_list_route, dashboard_
 from functions.dashboard.ips_add_range import ips_add_range_route
 from functions.dashboard.ips_add_custom import ips_add_custom_route
 from functions.dashboard.dashboard_profile import dashboard_profile_route
+<<<<<<< HEAD
 from functions.dashboard.dashboard_ip_functions import fetch_ips_route,  fetch_rdns_route
+=======
+from functions.dashboard.dashboard_ip_functions import (
+    fetch_ips_route,
+    fetch_ips_stream_route,
+    fetch_rdns_route,
+)
+>>>>>>> 02543b253e15d235757ea2374d4383109291d468
 
 from functions.providers_data import providers_bulk
 
@@ -93,7 +101,7 @@ def blacklist():
 
 # @app.route("/bulk-blacklist", methods=["GET", "POST"])
 # def bulkblacklist():
-#    
+#
 
 
 @app.route("/whois-lookup", methods=["POST", "GET"])
@@ -171,9 +179,10 @@ def fetch_ips():
     return fetch_ips_route()
     # return redirect(url_for("dashboard_ip"))
 
-# @app.route("/fetch-ips-stream", methods=["GET"])
-# def fetch_ips_stream():
-#     return fetch_ips_stream_route()
+
+@app.route("/fetch-ips-stream", methods=["GET"])
+def fetch_ips_stream():
+    return fetch_ips_stream_route()
 
 
 @app.route("/fetch-rdns", methods=["POST", "GET"])
