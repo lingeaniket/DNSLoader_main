@@ -57,6 +57,58 @@
                 </div>
             </div>
             <!-- End Card Item -->
+
+            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="card values-card">
+                    <div>
+                        <h3>Bulk BlackList</h3>
+                        <p>The blacklist check compares the IP address of a mail server to more than 70 DNS-based email blacklists.</p>
+                    </div>
+                    <!-- Search Box and Button -->
+                    <form action="{{url_for('bulkblacklist')}}" method="post">
+                        <div class="search-container">
+                            <input type="text" class="search-input" name="ip" placeholder="Search..." />
+                            <button type="submit" class="search-btn">Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- End Card Item -->
+            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="card values-card">
+                    <div>
+                        <h3>Whois Lookup</h3>
+                        <p>DNS records for a domain will be listed in this test's priority order.</p>
+                    </div>
+                    <!-- Search Box and Button -->
+                    <form action="{{url_for('whoisfetch')}}" method="post">
+                        <div class="search-container">
+                            <input type="text" class="search-input" name="domain" placeholder="Search..." />
+                            <button type="submit" class="search-btn">Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- End Card Item -->
+            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="card values-card">
+                    <div>
+                        <h3>SSL Cheacker</h3>
+                        <p>
+                            The RDNS (Reverse DNS) Lookup tool helps you determine the domain name associated with an IP address by
+                            performing a reverse DNS query
+                        </p>
+                    </div>
+                    <!-- Search Box and Button -->
+                    <form action="{{url_for('getsslchecker')}}" method="post">
+                        <div class="search-container">
+                            <input type="text" class="search-input" name="ip" placeholder="Search..." />
+                            <button type="submit" class="search-btn">Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- End Card Item -->
         </div>
     </div>
 </section>
