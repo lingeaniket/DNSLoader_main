@@ -87,6 +87,7 @@ def fetch_ips_route():
 
 # FETCH RDNS FUNCTIONS ###########
 
+
 def reverse_DNS(ip, type):
     try:
         if type == "custom":
@@ -176,7 +177,7 @@ def fetch_rdns_route():
             LIMIT 100"""
     )
 
-    if request.method == "GET":
+    if request.method == "POST":
         rdns = []
 
         non_updated_rdns = mycursor.fetchall()

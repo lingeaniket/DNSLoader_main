@@ -19,6 +19,11 @@ def dashboard_ip_route():
             username = session.get("username")
             role = session.get("role")
 
+            page = int(request.args.get("page", 1))  # Default page is 1
+            per_page = int(request.args.get("per_page", 100))  # Default per_page is 100
+
+            offset = (page - 1) * per_page
+
             # initialize the cursor
             mycursor = mysql.connection.cursor()
 
@@ -29,9 +34,15 @@ def dashboard_ip_route():
                 f"""SELECT tblips.*, tblipgroups.group_name AS ipgroup_name
                     FROM tblips
                     LEFT JOIN tblipgroups ON tblips.ipgroup = tblipgroups.id
-                    WHERE tblips.ownerid ='{user_id}'"""
+                    WHERE tblips.ownerid ='{user_id}' ORDER BY id ASC LIMIT {per_page} OFFSET {offset}"""
             )
             results = mycursor.fetchall()
+            mycursor.connection.commit()
+
+            mycursor.execute(f"""SELECT id FROM tblips WHERE ownerid ='{user_id}'""")
+
+            total_pages = mycursor.fetchall()
+            mycursor.connection.commit()
 
             mycursor.execute(f"SELECT * FROM tblipgroups WHERE ownerid='{user_id}'")
             groups = mycursor.fetchall()
@@ -42,9 +53,15 @@ def dashboard_ip_route():
                 groups_obj.append({"id": group[0], "name": group[1]})
 
             # render the template with results
+
+            print(per_page)
+            print(total_pages)
+            print(len(total_pages) / per_page)
             return render_template(
                 "dashboard/ip/dashboard-ip.html",
                 result={
+                    "page": page,
+                    "total_pages": int(len(total_pages) / per_page),
                     "Ips": results,
                     "ip_group": groups_obj,
                     "fullname": user_fullname,

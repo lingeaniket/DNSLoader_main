@@ -10,8 +10,7 @@
 <!-- Include sidebar -->
 {%block sidebar %}
 <!-- Set Values -->
-{%set tab="ip"%} {%set isLoggedIn=True%}{%set fullname=result.fullname%} {%set username=result.username%}{%set user_role=result.role%}
-{%include "dashboard/profile_sidebar.html"%}
+{%set tab="ip"%} {%set isLoggedIn=True%}{%set fullname=result.fullname%} {%set username=result.username%}{%set user_role=result.role%} {%include "dashboard/profile_sidebar.html"%}
 {%endblock%}
 
 <!-- Main Block -->
@@ -22,7 +21,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">IP Table</h5>
-                    <table class="styled-table">
+                    <table class="styled-table" id="ip-table">
                         <thead>
                             <tr>
                                 <th>Sr. No</th>
@@ -42,15 +41,9 @@
                                 <td id="{{ip[1]}}-01">{{ip[3]}}</td>
                                 <td id="{{ip[1]}}-02">{{ip[4]}}</td>
                                 <td>{{ip[5]}}</td>
-                                <td>{{ip[9]}}</td>
+                                <td>{{ip[11]}}</td>
                                 <td>
-                                    <button
-                                        type="button"
-                                        class="search-button1"
-                                        onclick="editIP('{{ip[1]}}'+'|'+'{{ip[5]}}')"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#editModal"
-                                    >
+                                    <button type="button" class="search-button1" onclick="editIP('{{ip[1]}}'+'|'+'{{ip[5]}}')" data-bs-toggle="modal" data-bs-target="#editModal">
                                         Edit
                                     </button>
                                 </td>
@@ -58,14 +51,23 @@
                             {%endfor%} {%endif%}
                         </tbody>
                     </table>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            {%for index in range(result.total_pages)%}
+                            <li class="page-item {{'active' if result.page == index+1 else ''}}">
+                                <a class="page-link {{'text-white bg-primary' if result.page == index+1 else ''}}" href="{{url_for('dashboard_ip')}}?page={{index+1}}"
+                                    >{{index+1}}</a
+                                >
+                            </li>
+                            {%endfor%}
+                        </ul>
+                    </nav>
                     <div class="login-b">
-                        <button type="button" class="search-button1" data-bs-toggle="modal" data-bs-target="#loginModal">
-                            Add IP address
-                        </button>
+                        <button type="button" class="search-button1" data-bs-toggle="modal" data-bs-target="#loginModal">Add IP address</button>
                         <div style="margin-left: 15px">
                             <form onsubmit="callFetchIPs(event)">
                                 <button class="search-button1" type="submit">Fetch IPs</button>
-                            </form> 
+                            </form>
                         </div>
                         <div style="margin-left: 15px">
                             <form onsubmit="callFetchRdns(event)">
