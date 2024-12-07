@@ -1137,6 +1137,7 @@ td p.table-ns {
 }
 
 .searched.hero {
+<<<<<<< HEAD
     min-height: 35vh;
     padding-bottom: 0px;
 }
@@ -1154,3 +1155,11 @@ td p.table-ns {
 .verification-message > p:last-of-type {
     margin-bottom: 10px;
 }
+=======
+  min-height: 35vh;
+  padding-bottom: 0px;
+}
+.dns-tool{
+  margin-bottom: -8px;
+}
+>>>>>>> e8bcdf79d56d9bca9414f3ab63a06670bc23bb1c
