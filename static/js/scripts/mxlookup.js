@@ -6,14 +6,9 @@ function onSubmit(token) {
         .then((response) => response.json())
         .then((data) => {
             if (data.success) {
-                form.action = "/mx-lookup";
-                form.method = "POST";
-                const recaptchaInput = document.createElement("input");
-                recaptchaInput.value = document.getElementById("domain").value;
-                recaptchaInput.name = "domain";
-                form.appendChild(recaptchaInput);
-                document.body.appendChild(form);
-                form.submit();
+                const formToSubmit = document.getElementById("form-to-submit");
+                formToSubmit.submit();
+
                 document.getElementById("loader").style.display = "block";
                 var buttons = document.querySelectorAll("button");
                 buttons.forEach(function (btn) {
@@ -35,6 +30,6 @@ function validate(event) {
     }
 }
 function onload() {
-    var element = document.getElementById("submit");
+    var element = document.getElementById("Submit");
     element.onclick = validate;
 }

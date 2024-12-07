@@ -6,12 +6,12 @@
 <meta content="" name="description" />
 <meta content="" name="keywords" />
 
-{%endblock%} {%block sidebar %} {%set tab="ip"%} {%set isLoggedIn=True%}{%set fullname=result.fullname%} {%set username=result.username%}
+{%endblock%}
 <!-- Include sidebar -->
+{%block sidebar %}
+<!-- Set Values -->
+{%set tab="ip"%} {%set isLoggedIn=True%}{%set fullname=result.fullname%} {%set username=result.username%}{%set user_role=result.role%}
 {%include "dashboard/profile_sidebar.html"%}
-
-
-
 {%endblock%}
 
 <!-- Main Block -->
@@ -63,12 +63,12 @@
                             Add IP address
                         </button>
                         <div style="margin-left: 15px">
-                            <form onsubmit="callFetch(event)">
-                                <button class="search-button1" type="submit">Fetch</button>
+                            <form onsubmit="callFetchIPs(event)">
+                                <button class="search-button1" type="submit">Fetch IPs</button>
                             </form> 
                         </div>
                         <div style="margin-left: 15px">
-                            <form action="{{url_for('fetch_rdns')}}" method="get">
+                            <form onsubmit="callFetchRdns(event)">
                                 <button class="search-button1" type="submit">Fetch RDNS</button>
                             </form>
                         </div>

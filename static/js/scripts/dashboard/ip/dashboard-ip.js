@@ -3,7 +3,14 @@ function fetchips() {
     eventsource.onmessage = function (event) {
         const { data } = JSON.parse(event.data);
 
-        console.log(data);
+        const spinnTd = document.getElementById(`${data.ip}-01`);
+        if (spinnTd) {
+            if (data.is_blacklisted) {
+                spinnTd.innerHTML = "Blacklisted";
+            } else {
+                spinnTd.innerHTML = "Clean";
+            }
+        }
     };
 
     eventsource.onerror = function () {
@@ -12,7 +19,7 @@ function fetchips() {
     };
 }
 
-function callFetch(event) {
+function callFetchIPs(event) {
     event.preventDefault();
 
     fetch("/fetch-ips", { method: "POST" })
@@ -21,7 +28,6 @@ function callFetch(event) {
         })
         .then((response) => {
             const ips = response.ips;
-            let ipdata = [];
 
             for (const ip in ips) {
                 const statusTd = document.getElementById(`${ips[ip]}-01`);
@@ -31,6 +37,39 @@ function callFetch(event) {
                 statusTd.appendChild(inSpinn);
             }
             fetchips();
+        });
+}
+
+function fetchrdns() {
+    const eventsource = new EventSource("/fetch-rdns-stream");
+    eventsource.onmessage = function (event) {
+        const { data } = JSON.parse(event.data);
+
+        const spinnTd = document.getElementById(`${data.ip}-02`);
+        if (spinnTd) {
+            spinnTd.innerHTML = data.rdns;
+        }
+    };
+    eventsource.onerror = function () {
+        console.error("Error occurred while streaming data");
+        eventsource.close(); // Close the connection
+    };
+}
+
+function callFetchRdns(event) {
+    event.preventDefault();
+    fetch("/fetch-rdns", { method: "POST" })
+        .then((response) => response.json())
+        .then((response) => {
+            const ips = response.ips;
+            for (const ip in ips) {
+                const statusTd = document.getElementById(`${ips[ip]}-02`);
+                statusTd.innerHTML = "";
+                const inSpinn = document.createElement("div");
+                inSpinn.classList.add("spinner");
+                statusTd.appendChild(inSpinn);
+            }
+            fetchrdns();
         });
 }
 

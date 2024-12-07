@@ -24,7 +24,7 @@
 <h2 data-aos="fade-up" data-aos-delay="0" class=""><span>Mx</span>Lookup</h2>
 <div data-aos="fade-up" data-aos-delay="0" class="">
     <div class="search-container">
-        <form>
+        <form action="{{url_for('mxlookup')}}" method="post" id="form-to-submit">
             <input
                 type="text"
                 placeholder="Search..."
@@ -33,7 +33,7 @@
                 value="{{ result.query if result.query else '' }}"
                 class="search-input"
             />
-            <button id="submit" type="submit" class="search-button">Search</button>
+            <button id="Submit" type="submit" class="search-button">Search</button>
             <div id="loader" class="loader"></div>
         </form>
         <div id="error-message"></div>

@@ -1,3 +1,4 @@
+import datetime
 from flask import redirect, render_template, request, session, url_for
 from flask_mysqldb import MySQL
 
@@ -20,8 +21,11 @@ def edit_ip_route():
         # initialize the cursor
         mycursor = mysql.connection.cursor()
 
+        date = datetime.datetime.today()
+        recent_date = date.strftime("%Y-%m-%d %H:%M:%S")
+
         # query for update the ip
-        query = """UPDATE tblips SET ipaddress=%s,comments=%s
+        query = """UPDATE tblips SET ipaddress=%s,comments=%s,updated_at='{recent_date}',ip_updated_at='{recent_date}
                     WHERE ipaddress=%s AND ownerid=%s AND comments=%s"""
         # get values for each variable in query
         values = (new_ip, new_comment, old_ip, owner_id, old_comment)

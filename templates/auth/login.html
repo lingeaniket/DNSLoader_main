@@ -7,6 +7,8 @@
         <meta name="keywords" content="" />
         <title>Login</title>
         {% include 'headlink.html'%}
+        <script src="static/js/scripts/auth/login.js"></script>
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     </head>
     <body class="index-page">
         {%set isLoggedIn=False%} {%include 'dashboard/profile_sidebar.html'%}
@@ -17,16 +19,16 @@
                     <form id="loginForm" class="mx-auto border p-5 bg-white mt-4 rounded" method="post" action="{{url_for('login')}}">
                         <h2 class=""><span>Log</span>in</h2>
                         <div class="mb-3">
-                            <label for="loginUsernameEmail" class="form-label">Username or Email</label>
-                            <input type="text" class="form-control" name="username" required />
+                            <label for="username" class="form-label">Username or Email</label>
+                            <input type="text" class="form-control" name="username" required autocomplete="username" />
                         </div>
                         <div class="mb-3">
-                            <label for="loginPassword" class="form-label">Password</label>
-                            <input type="password" class="form-control" name="password" required />
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" name="password" required autocomplete="current-password" />
                         </div>
                         {%if result%} {{result.error}} {%endif%}
                         <div class="login-b">
-                            <button type="submit" class="search-button1">Login</button>
+                            <button type="submit" id="Submit" class="search-button1">Login</button>
                         </div>
                         <div class="mt-2 d-flex justify-content-center">
                             Not registered?<a class="ms-2" href="{{url_for('registration')}}"> Create account</a>
@@ -39,29 +41,12 @@
         <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
             <i class="bi bi-arrow-up-short"></i>
         </a>
-        {%include "footer.html"%}
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const elements = document.querySelectorAll(".slide-up"); // Select elements with 'slide-up' class
-                const observer = new IntersectionObserver(
-                    (entries, observer) => {
-                        entries.forEach((entry) => {
-                            if (entry.isIntersecting) {
-                                entry.target.classList.add("active"); // Add 'active' class when element is in view
-                                observer.unobserve(entry.target); // Stop observing once the element is revealed
-                            }
-                        });
-                    },
-                    {
-                        threshold: 0.1, // Trigger when 10% of the element is visible
-                    },
-                );
-
-                elements.forEach((element) => {
-                    observer.observe(element); // Start observing each element
-                });
-            });
-        </script>
-        {%include 'scripts.html'%}
+        <div
+            class="g-recaptcha"
+            data-callback="onSubmit"
+            data-size="invisible"
+            data-sitekey="6Lf1ZE4qAAAAAE-NSbeNBav3idxGjxYheBiFvlOk"
+        ></div>
+        {%include "footer.html"%} {%include 'scripts.html'%}
     </body>
 </html>

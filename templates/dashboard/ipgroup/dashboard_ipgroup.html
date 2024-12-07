@@ -9,7 +9,7 @@
 <!-- Sidebar Block -->
 {%block sidebar %}
 <!-- Set Values -->
-{%set tab="ipgroup"%} {%set isLoggedIn=True%} {%set fullname=result.fullname%} {%set username=result.username%}
+{%set tab="ipgroup"%} {%set isLoggedIn=True%} {%set fullname=result.fullname%} {%set username=result.username%} {%set user_role=result.role%}
 <!-- Include sidebar -->
 {%include "dashboard/profile_sidebar.html"%} {%endblock%}
 
@@ -35,22 +35,10 @@
                                 <td>{{group[0]}}</td>
                                 <td>{{group[1]}}</td>
                                 <td>
-                                    <button
-                                        type="button"
-                                        class="search-button1"
-                                        onclick="editGroup('{{group[1]}}')"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#editModal"
-                                    >
+                                    <button type="button" class="search-button1" onclick="editGroup('{{group[1]}}')" data-bs-toggle="modal" data-bs-target="#editModal">
                                         Edit
                                     </button>
-                                    <button
-                                        type="button"
-                                        class="search-button1"
-                                        onclick="deleteGroup('{{group[0]}}')"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#deleteModal"
-                                    >
+                                    <button type="button" class="search-button1" onclick="deleteGroup('{{group[0]}}')" data-bs-toggle="modal" data-bs-target="#deleteModal">
                                         Delete
                                     </button>
                                 </td>
@@ -77,9 +65,7 @@
                             <div class="modal-content">
                                 <form action="{{url_for('dashboard_ipgroup')}}" method="post">
                                     <div class="modal-header">
-                                        <h5 class="modal-title d-flex align-items-center">
-                                            <i class="bi bi-person-circle fs-3 me-2"></i>Add Group
-                                        </h5>
+                                        <h5 class="modal-title d-flex align-items-center"><i class="bi bi-person-circle fs-3 me-2"></i>Add Group</h5>
                                         <button type="reset" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
@@ -88,14 +74,7 @@
                                             <input type="text" name="group_name" class="form-control shadow-none" />
                                         </div>
                                         <div class="login-b">
-                                            <button
-                                                type="submit"
-                                                class="search-button1"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#loginModal"
-                                            >
-                                                Add Group
-                                            </button>
+                                            <button type="submit" class="search-button1" data-bs-toggle="modal" data-bs-target="#loginModal">Add Group</button>
                                         </div>
                                     </div>
                                 </form>
@@ -117,9 +96,7 @@
                             <div class="modal-content">
                                 <form action="{{url_for('update_ipgroup')}}" method="post" id="editModal">
                                     <div class="modal-header">
-                                        <h5 class="modal-title d-flex align-items-center">
-                                            <i class="bi bi-person-circle fs-3 me-2"></i>Edit Group
-                                        </h5>
+                                        <h5 class="modal-title d-flex align-items-center"><i class="bi bi-person-circle fs-3 me-2"></i>Edit Group</h5>
                                         <button type="reset" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
@@ -131,9 +108,7 @@
                                             </div>
                                         </div>
                                         <div class="login-b">
-                                            <button type="submit" class="search-button1" data-bs-toggle="modal" data-bs-target="#editModal">
-                                                Save Group Name
-                                            </button>
+                                            <button type="submit" class="search-button1" data-bs-toggle="modal" data-bs-target="#editModal">Save Group Name</button>
                                         </div>
                                     </div>
                                 </form>
@@ -155,39 +130,16 @@
                             <div class="modal-content">
                                 <form action="{{url_for('delete_ipgroup')}}" method="post">
                                     <div class="modal-header">
-                                        <h5 class="modal-title d-flex align-items-center">
-                                            <i class="bi bi-person-circle fs-3 me-2"></i>Delete Group
-                                        </h5>
+                                        <h5 class="modal-title d-flex align-items-center"><i class="bi bi-person-circle fs-3 me-2"></i>Delete Group</h5>
                                         <button type="reset" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         <!-- input function -->
-                                        <input
-                                            type="text"
-                                            id="delete_group"
-                                            name="delete_group"
-                                            class="form-control shadow-none"
-                                            style="display: none"
-                                        />
+                                        <input type="text" id="delete_group" name="delete_group" class="form-control shadow-none" style="display: none" />
 
                                         <div class="login-b">
-                                            <button
-                                                type="submit"
-                                                class="search-button1"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#deleteModal"
-                                            >
-                                                Yes
-                                            </button>
-                                            <button
-                                                style="margin-left: 20px"
-                                                type="reset"
-                                                class="search-button1"
-                                                data-bs-dismiss="modal"
-                                                aria-label="Close"
-                                            >
-                                                No
-                                            </button>
+                                            <button type="submit" class="search-button1" data-bs-toggle="modal" data-bs-target="#deleteModal">Yes</button>
+                                            <button style="margin-left: 20px" type="reset" class="search-button1" data-bs-dismiss="modal" aria-label="Close">No</button>
                                         </div>
                                     </div>
                                 </form>

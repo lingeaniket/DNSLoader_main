@@ -17,6 +17,7 @@ def dashboard_ip_route():
             user_id = session.get("user_id")
             user_fullname = session.get("user_fullname")
             username = session.get("username")
+            role = session.get("role")
 
             # initialize the cursor
             mycursor = mysql.connection.cursor()
@@ -48,6 +49,7 @@ def dashboard_ip_route():
                     "ip_group": groups_obj,
                     "fullname": user_fullname,
                     "username": username,
+                    "role": role,
                 },
             )
 
@@ -59,6 +61,7 @@ def dashboard_ip_list_route():
         user_id = session.get("user_id")
         user_fullname = session.get("user_fullname")
         username = session.get("username")
+        role = session.get("role")
 
         # initialize the cursor
         mycursor = mysql.connection.cursor()
@@ -90,5 +93,6 @@ def dashboard_ip_list_route():
                 "ip_group": groups_obj,
                 "fullname": user_fullname,
                 "username": username,
+                "role": role,
             },
         )

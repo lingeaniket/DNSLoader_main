@@ -5,7 +5,7 @@
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
         <meta name="description" content="" />
         <meta name="keywords" content="" />
-        <title>Login</title>
+        <title>Registration</title>
         {%include "headlink.html"%}
     </head>
     <body class="index-page">
@@ -14,12 +14,7 @@
             <!-- Hero Section -->
             <section id="hero" class="hero section">
                 <div class="container d-flex flex-column align-items-center slide-up">
-                    <form
-                        id="loginForm"
-                        class="mx-auto border p-5 bg-white mt-4 rounded"
-                        method="post"
-                        action="{{url_for('registration')}}"
-                    >
+                    <form id="loginForm" class="mx-auto border p-5 bg-white mt-4 rounded" method="post" action="{{url_for('registration')}}">
                         <h2 class=""><span>Reg</span>ister</h2>
                         <div class="mb-3">
                             <label for="loginUsernameEmail" class="form-label">User Name</label>
@@ -49,9 +44,7 @@
                         <div class="login-b">
                             <button type="submit" class="search-button1">Register</button>
                         </div>
-                        <div class="mt-2 d-flex justify-content-center">
-                            Already have an account?<a class="ms-2" href="{{url_for('login')}}"> Go to login</a>
-                        </div>
+                        <div class="mt-2 d-flex justify-content-center">Already have an account?<a class="ms-2" href="{{url_for('login')}}"> Go to login</a></div>
                     </form>
                 </div>
             </section>

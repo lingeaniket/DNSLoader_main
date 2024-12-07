@@ -1,0 +1,28 @@
+<!-- Email Icon -->
+<!-- <i class="bi bi-envelope-paper fs-1 text-primary mb-3 ooo"></i> -->
+{%if result.mode=="token-expired"%}
+<div class="w-100 d-flex justify-content-center">
+    <img class="mb-3" style="height: 60px; width: 60px; position: relative" src="static/img/email-verification-expired.png" alt="Email Verification" />
+</div>
+<!-- Verification Message -->
+<h2><strong>Email Verification link expired</strong>.</h2>
+<p>Look like the verification is expired. Not to worry, we can send the link again.</p>
+<!-- Resend Button -->
+
+<form action="{{url_for('resend_email_verification')}}" method="post" class="mb-3">
+    <input type="text" name="email" style="display: none" value="{{email}}" />
+    <button type="submit" class="btn btn-primary">Resend Verification Link</button>
+</form>
+{%elif result.mode == "no-user-found" %}
+<div class="w-100 d-flex justify-content-center">
+    <img class="mb-3" style="height: 60px; width: 60px; position: relative" src="static/img/account-not-found.png" alt="Email Verification" />
+</div>
+<h3><strong>User not found</strong>.</h3>
+<div class="verification-message">
+    <p>Look like the user not found is expired. Not to worry, we can send the link again.</p>
+    <p>Just <a href="/login">login</a> with your credentials and hit Resend Verification Link button</p>
+</div>
+{%endif%}
+
+<!-- Return to Site Link -->
+<a href="/" class="text-decoration-underline">Return to Site <i class="bi bi-arrow-right"></i></a>

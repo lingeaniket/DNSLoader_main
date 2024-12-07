@@ -27,7 +27,25 @@ def login_route():
 
         if not user:  # means user is not found in the database
             # return error message
-            return render_template("login.html", result={"error": "User not found!"})
+            return render_template(
+                "auth/login.html", result={"error": "User not found!"}
+            )
+
+        if user[8] == 0:
+            session["pending_email"] = user[3]
+            return redirect(url_for("verification_pending"))
+
+        if user[9] == 0:
+            return render_template(
+                "auth/login.html",
+                result={"error": "Admin has not approved your request yet"},
+            )
+
+        if user[10] == "Inactive" or user[10] == "Closed":
+            return render_template(
+                "auth/login.html",
+                result={"error": "Your Account is Inactive/Closed"},
+            )
 
         # convert the db password to "utf-8" string, to avoid problems with bcrypt
         hash_password = user[4].encode("utf-8")
@@ -38,7 +56,6 @@ def login_route():
         result = bcrypt.checkpw(password, hash_password)
 
         if result:  # if the password matches
-            # check if user's email is verified and it is approved by admin
 
             # store required data in the session
             # myresult = ((Id, Firstname, Lastname, email, password, username))
@@ -46,8 +63,10 @@ def login_route():
             # store user_fullname in session, concat firstname and lastname
             session["user_fullname"] = user[1] + " " + user[2]
             session["username"] = user[5]  # store username in session
+            session["role"] = user[11]  # store role of user in session
+
             # after successful login, redirect to dashboard
-            return redirect(url_for("dashboard_ip"))
+            return redirect(url_for("dashboard_profile"))
         # if password does not matches, return error as "Invalid Credentials!!"
         return render_template(
             "auth/login.html", result={"error": "Invalid Credentials!!"}

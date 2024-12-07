@@ -1,0 +1,17 @@
+<!-- Verification Message -->
+<div class="w-100 d-flex justify-content-center">
+    <img class="mb-3" style="height: 60px; width: 60px; position: relative" src="static/img/email-verified.png" alt="account active" />
+</div>
+
+<h3 class="mb-4"><strong>Account Activated</strong>.</h3>
+
+<h3 class="mb-4"><strong>Hello, {{result.fullname}}({{result.username}})</strong>.</h3>
+<div class="verification-message">
+    <p>Thank you, your email has been verified. Your account is now Active</p>
+    <p class="mb-4">Please use the link below to login to your account.</p>
+</div>
+<!-- Resend Button -->
+
+<form action="/login" method="post" class="mb-3">
+    <button type="submit" class="btn" style="background-color: #002f93; color: #fff">LOGIN TO YOUR ACCOUNT</button>
+</form>

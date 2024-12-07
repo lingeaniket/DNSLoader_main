@@ -30,11 +30,15 @@
     </head>
     <body>
         {%block sidebar %}{%endblock%}
+        <!-- Scroll Top -->
         <!-- Set Values -->
 
         <main id="main" class="main">{%block main%}{%endblock%}</main>
         <!-- End #main -->
         <!-- ======= Footer ======= -->
+        <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
+            <i class="bi bi-arrow-up-short"></i>
+        </a>
         <div id="footer1">{%include "footer.html"%}</div>
         <!-- Scripts -->
         {%include "scripts.html"%}

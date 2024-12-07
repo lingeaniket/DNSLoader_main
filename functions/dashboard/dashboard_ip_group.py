@@ -10,6 +10,7 @@ def dashboard_ipgroup_route():
             user_id = session.get("user_id")
             user_fullname = session.get("user_fullname")
             username = session.get("username")
+            role = session.get("role")
 
             mycursor = mysql.connection.cursor()
 
@@ -24,6 +25,7 @@ def dashboard_ipgroup_route():
                     "group": results,
                     "fullname": user_fullname,
                     "username": username,
+                    "role": role,
                 },
             )
         elif request.method == "POST":
@@ -31,6 +33,7 @@ def dashboard_ipgroup_route():
             user_id = session.get("user_id")
             user_fullname = session.get("user_fullname")
             username = session.get("username")
+            role = session.get("role")
 
             mycursor = mysql.connection.cursor()
             mycursor.execute(
@@ -48,6 +51,7 @@ def dashboard_ipgroup_route():
                     "group": results,
                     "fullname": user_fullname,
                     "username": username,
+                    "role": role,
                 },
             )
     else:

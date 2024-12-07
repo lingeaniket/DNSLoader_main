@@ -3,7 +3,7 @@ import bcrypt
 from flask import redirect, render_template, request, session, url_for
 from flask_mysqldb import MySQL
 
-from functions.email_verification import send_verification_email
+from functions.mail.email_verification import send_verification_email
 
 mysql = MySQL()
 
@@ -11,7 +11,7 @@ mysql = MySQL()
 def registration_route():
     # if user is already logged in, redirect to profile
     if session.get("user_id"):
-        return redirect(url_for("dashboard/profile/dashboard_profile"))
+        return redirect(url_for("dashboard_profile"))
     elif request.method == "GET":  # if method is GET, render registration.html template
         return render_template("auth/registration.html")
     elif request.method == "POST":
@@ -64,8 +64,7 @@ def registration_route():
         mysql.connection.commit()  # close connection
 
         send_verification_email(email, username)
+        session["email_verify"] = email
 
         # after successful creation of user, redirect to the dashboard
-        # return redirect(url_for("dashboard/ip/dashboard_ip"))
-
-        return render_template("email_verify.html")
+        return redirect(url_for("email_verification"))

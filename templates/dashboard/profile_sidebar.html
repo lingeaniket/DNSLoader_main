@@ -1,7 +1,7 @@
 <header id="header" class="header fixed-top d-flex align-items-center">
     <div class="d-flex align-items-center justify-content-between">
         <!-- <a href="index.php" class="logo d-flex align-items-center me-auto"> -->
-        <a href="{{url_for('mxlookup')}}" class="logo d-flex align-items-center me-auto">
+        <a href="{{url_for('index')}}" class="logo d-flex align-items-center me-auto">
             <h1 class="sitename">DNS<span>Loader</span></h1>
         </a>
         <i class="bi bi-list toggle-sidebar-btn"></i>
@@ -107,16 +107,24 @@
         </li>
         <li class="nav-item">
             <a class="nav-link {%if not tab=='ip' %}collapsed {%endif%}" href="{{url_for('dashboard_ip')}}">
-                <i class="bi bi-person"></i>
+                <i class="bi bi-globe"></i>
                 <span>IP</span>
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link {%if not tab=='ipgroup' %}collapsed {%endif%}" href="{{url_for('dashboard_ipgroup')}}">
-                <i class="bi bi-person"></i>
+                <i class="bi bi-card-list"></i>
                 <span>IP Groups</span>
             </a>
         </li>
+        {%if user_role == 'admin' %}
+        <li class="nav-item">
+            <a class="nav-link {%if not tab=='users' %}collapsed {%endif%}" href="{{url_for('dashboard_users')}}">
+                <i class="bi bi-person"></i>
+                <span>Users</span>
+            </a>
+        </li>
+        {%endif%}
     </ul>
 </aside>
 {%endif%}

@@ -8,6 +8,8 @@
         {%block title%} {%endblock%}
         <!-- Script Block -->
         {%block script%}{%endblock%}
+        <!-- <script src="static/"></script> -->
+        {%include 'headlink.html' %}
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     </head>
     <body class="index-page">
@@ -30,12 +32,7 @@
         <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
             <i class="bi bi-arrow-up-short"></i>
         </a>
-        <div
-            class="g-recaptcha"
-            data-callback="onSubmit"
-            data-size="invisible"
-            data-sitekey="6Lf1ZE4qAAAAAE-NSbeNBav3idxGjxYheBiFvlOk"
-        ></div>
+        <div class="g-recaptcha" data-callback="onSubmit" data-size="invisible" data-sitekey="6Lf1ZE4qAAAAAE-NSbeNBav3idxGjxYheBiFvlOk"></div>
         <!-- Include footer file -->
         {% include 'footer.html' %}
         <!-- Add script if any -->

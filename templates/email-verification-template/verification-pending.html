@@ -1,0 +1,12 @@
+<div class="w-100 d-flex justify-content-center">
+    <img class="mb-3" style="height: 60px; width: 60px; position: relative" src="static/img/email-verification-pending.png" alt="Email Verification" />
+</div>
+<h3 class="mb-4"><strong>Email verification is pending</strong>.</h3>
+<div class="verification-message">
+    <p>We have already sent an email for verification.</p>
+    <p class="mb-4">Follow the instructions in email for loggin into your account</p>
+</div>
+<form action="{{url_for('resend_email_verification')}}" method="post" class="mb-3">
+    <input type="text" name="email" style="display: none" value="{{result.email}}" />
+    <button type="submit" class="btn btn-primary">Send Email Again</button>
+</form>

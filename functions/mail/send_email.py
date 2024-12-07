@@ -19,9 +19,9 @@ def send_email_route(row):
         mycursor = mysql.connection.cursor()
         query = f"SELECT *FROM tblusers WHERE id='{user_id}'"
         mycursor.execute(query)
-        result = mycursor.fetchall()
+        result = mycursor.fetchone()
         if result:
-            email = result[0][3]
+            email = result[3]
             mycursor.connection.commit()
 
             msg = Message(

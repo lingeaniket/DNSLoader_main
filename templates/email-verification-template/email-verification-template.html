@@ -1,0 +1,26 @@
+{%extends 'tools-template.html' %}
+<!-- Title Block -->
+{%block title %}
+<title>Email Verification</title>
+{%endblock%}
+<!-- Main Block -->
+{%block form %}
+
+<div class="bg-light d-flex justify-content-center align-items-center">
+    <div class="container bg-white rounded shadow p-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="text-center">
+                    {%if result.type =="after-register"%} {%include "email-verification-template/after-registration-page.html"%}
+                    <!-- Template for email link expired -->
+                    {%elif result.type =="expired"%} {%include "email-verification-template/verify-email-link-expired.html"%}
+                    <!-- Template for email verification pending -->
+                    {%elif result.type == "pending"%} {%include "email-verification-template/verification-pending.html"%}
+                    <!-- Template for email verification success -->
+                    {%elif result.type == "verified"%} {% include "email-verification-template/email-verified.html"%} {%endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}
