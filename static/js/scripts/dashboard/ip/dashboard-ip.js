@@ -43,7 +43,8 @@ function callFetchIPs(event) {
 function fetchrdns() {
     const eventsource = new EventSource("/fetch-rdns-stream");
     eventsource.onmessage = function (event) {
-        const { data } = JSON.parse(event.data);
+        const data = JSON.parse(event.data);
+        console.log(data);
 
         const spinnTd = document.getElementById(`${data.ip}-02`);
         if (spinnTd) {
@@ -62,14 +63,20 @@ function callFetchRdns(event) {
         .then((response) => response.json())
         .then((response) => {
             const ips = response.ips;
+            
             for (const ip in ips) {
                 const statusTd = document.getElementById(`${ips[ip]}-02`);
-                statusTd.innerHTML = "";
-                const inSpinn = document.createElement("div");
-                inSpinn.classList.add("spinner");
-                statusTd.appendChild(inSpinn);
+
+                console.log(statusTd)
+
+                if (statusTd) {
+                    statusTd.innerHTML = "";
+                    const inSpinn = document.createElement("div");
+                    inSpinn.classList.add("spinner");
+                    statusTd.appendChild(inSpinn);
+                }
             }
-            fetchrdns();
+            // fetchrdns();
         });
 }
 
