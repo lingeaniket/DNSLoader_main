@@ -41,7 +41,7 @@ def dashboard_ip_route():
 
             mycursor.execute(f"""SELECT id FROM tblips WHERE ownerid ='{user_id}'""")
 
-            total_pages = mycursor.fetchall()
+            total_pages_len = mycursor.fetchall()
             mycursor.connection.commit()
 
             mycursor.execute(f"SELECT * FROM tblipgroups WHERE ownerid='{user_id}'")
@@ -54,14 +54,20 @@ def dashboard_ip_route():
 
             # render the template with results
 
-            print(per_page)
-            print(total_pages)
-            print(len(total_pages) / per_page)
+            total_pages = 0
+
+            total_res = len(total_pages_len) / per_page
+            is_greater = int(total_res) < total_res
+            if is_greater:
+                total_pages = int(len(total_pages_len) / per_page) + 1
+            else:
+                total_pages = int(total_res)
+
             return render_template(
                 "dashboard/ip/dashboard-ip.html",
                 result={
                     "page": page,
-                    "total_pages": int(len(total_pages) / per_page),
+                    "total_pages": total_pages,
                     "Ips": results,
                     "ip_group": groups_obj,
                     "fullname": user_fullname,

@@ -6,32 +6,32 @@
     name="description"
     content="To find domain names linked to IP addresses, run a Reverse DNS (RDNS) Lookup. Accurate RDNS mapping improves email deliverability and fortifies security."
 />
-<meta
-    name="keywords"
-    content="IP address lookup, domain verification, network security, email deliverability, reverse DNS mapping, RDNS lookup, and reverse DNS check"
-/>
+<meta name="keywords" content="IP address lookup, domain verification, network security, email deliverability, reverse DNS mapping, RDNS lookup, and reverse DNS check" />
 {% include 'headlink.html'%} {%endblock%}
 
 <!-- Script of page -->
 {%block script%}
-<script src="/static/js/scripts/rdnslookup.js"></script>
+<script>
+    function validate(event) {
+        event.preventDefault();
+        if (!document.getElementById("ip").value) {
+            alert("You must add text to the required field");
+        } else {
+            window.formid = "rdns-form";
+            grecaptcha.execute();
+        }
+    }
+</script>
 {%endblock%}
 
 <!-- Form of Page -->
 {%block form%}
-<h2 data-aos="fade-up" data-aos-delay="100" class=""><span>R</span>DNS Lookup</h2>
-<div data-aos="fade-up" data-aos-delay="300" class="">
-    <div class="search-container">
-        <form action="{{url_for('rdnslookup')}}" method="post">
-            <input
-                type="text"
-                placeholder="Search..."
-                name="ip"
-                id="ip"
-                value="{{ result.ip if result.ip else '' }}"
-                class="search-input"
-            />
-            <button type="submit" id="submit" class="search-button">Search</button>
+<h2><span>RDNS</span> Lookup</h2>
+<div>
+    <div class="search-container slide-up {{'searched' if result.fetched else ''}}">
+        <form action="{{url_for('rdnslookup')}}" method="post" id="rdns-form" style="display: flex; align-items: center; gap: 10px; position: relative">
+            <input type="text" placeholder="Enter the IP address" name="ip" id="ip" value="{{ result.ip if result.ip else '' }}" class="search-input" />
+            <button type="submit" id="Submit" class="search-button">Search</button>
             <div id="loader" class="loader"></div>
         </form>
         <div id="error-message"></div>
@@ -41,7 +41,7 @@
 
 <!-- Response Table -->
 {%block res_table%} {%if result.ip%}
-<section id="table" class="table">
+<section id="table" class="table tools-table">
     <div class="table-contant">
         {%if result.ip%}
         <h4>Result for IP {{result.ip}}</h4>
@@ -61,8 +61,8 @@
         <tbody>
             {% if result.ip %}
             <tr>
-                <td>{{result.ip}}</td>
-                <td>{{result.result}}</td>
+                <td data-label="IP Address">{{result.ip}}</td>
+                <td data-label="Host Name">{{result.result}}</td>
                 <td>
                     <form action="{{url_for('blacklist')}}" method="post">
                         <input type="text" name="ip" value="{{result.ip}}" style="display: none" />
@@ -80,16 +80,15 @@
 <!-- About Section -->
 {%block about%} {%if not result.ip%}
 <section id="about" class="about section">
-    <div class="container" data-aos="fade-up">
+    <div class="container">
         <div class="row gx-0">
-            <div class="col-lg-12 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
+            <div class="col-lg-12 d-flex flex-column justify-content-center slide-up">
                 <div class="content">
                     <h2>About RDNS</h2>
                     <p>
-                        The RDNS (Reverse DNS) Lookup tool helps you determine the domain name associated with an IP address by performing a
-                        reverse DNS query. This is essential for verifying email server configurations, ensuring proper domain-IP mapping,
-                        and enhancing security. By using RDNS Lookup, you can quickly troubleshoot issues related to email deliverability
-                        and confirm that your server's IP address resolves to a valid domain name, contributing to trust and credibility in
+                        The RDNS (Reverse DNS) Lookup tool helps you determine the domain name associated with an IP address by performing a reverse DNS query. This is essential
+                        for verifying email server configurations, ensuring proper domain-IP mapping, and enhancing security. By using RDNS Lookup, you can quickly troubleshoot
+                        issues related to email deliverability and confirm that your server's IP address resolves to a valid domain name, contributing to trust and credibility in
                         online communications.
                     </p>
                 </div>

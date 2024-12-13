@@ -6,27 +6,34 @@
     name="description"
     content="Use our SSL Checker to quickly verify the status of your SSL certificate. Maintain user and search engine confidence by making sure your website is secure and that SSL is installed."
 />
-<meta
-    name="keywords"
-    content=" Website security, SSL status, SSL installation, HTTPS verification, secure connection, SSL checker, SSL certificate check, and SSL"
-/>
+<meta name="keywords" content=" Website security, SSL status, SSL installation, HTTPS verification, secure connection, SSL checker, SSL certificate check, and SSL" />
 <title>SSL Checker | DNSLoader</title>
-{%include "headlink.html"%}{%endblock%}
+{%endblock%}
+
+<!-- Script Block -->
+{%block script%}
+<script>
+    function validate(event) {
+        event.preventDefault();
+        if (!document.getElementById("host").value) {
+            alert("You must add text to the required field");
+        } else {
+            window.formid = "sslchecker-form";
+            grecaptcha.execute();
+        }
+    }
+</script>
+{%endblock%}
 
 <!-- Form Block -->
 {%block form %}
 <h2><span>SSL</span> Checker</h2>
 <div>
-    <div class="search-container slide-up">
-        <form action="{{url_for('getsslchecker')}}" method="POSt">
-            <input
-                type="text"
-                value="{{result.query if result.query else ''}}"
-                placeholder="Enter domain"
-                name="host"
-                class="search-input"
-            />
-            <button type="submit" class="search-button">Check SSL</button>
+    <div class="search-container slide-up {{'searched' if result.fetched else ''}}">
+        <form action="{{url_for('getsslchecker')}}" method="POST" id="sslchecker-form" style="display: flex; align-items: center; gap: 10px; position: relative">
+            <input type="text" value="{{result.query if result.query else ''}}" id="host" placeholder="Enter domain name" name="host" class="search-input" />
+            <button type="submit" id="Submit" class="search-button">Check SSL</button>
+            <div class="loader" id="loader"></div>
         </form>
     </div>
 </div>
@@ -84,13 +91,10 @@
                     <td>
                         <div class="B-icon">{%include "cross_icon.html"%}</div>
                     </td>
-                    <td colspan="2">
-                        The SSL certificate tests failed. Please be sure that you can connect to your site over SSL and try again..
-                    </td>
+                    <td colspan="2">The SSL certificate tests failed. Please be sure that you can connect to your site over SSL and try again..</td>
                 </tr>
             </tbody>
             {%else%}
-
             <tbody>
                 <tr>
                     <td>
@@ -135,20 +139,14 @@
                 </tr>
                 <tr>
                     <td>
-                        <div class="B-icon">
-                            {%if result.certificate.certificate_valid%} {%include "check_icon.html"%} {%else%} {%include "cross_icon.html"%}
-                            {%endif%}
-                        </div>
+                        <div class="B-icon">{%if result.certificate.certificate_valid%} {%include "check_icon.html"%} {%else%} {%include "cross_icon.html"%} {%endif%}</div>
                     </td>
                     <td>Valid Certificate</td>
                     <td>Your SSL Certificate is{{ ' ' if result.certificate.certificate_valid else ' not '}}installled correctly.</td>
                 </tr>
                 <tr>
                     <td>
-                        <div class="B-icon">
-                            {%if result.certificate.domain_matching_error%} {%include "cross_icon.html"%} {%else%} {%include
-                            "check_icon.html"%} {%endif%}
-                        </div>
+                        <div class="B-icon">{%if result.certificate.domain_matching_error%} {%include "cross_icon.html"%} {%else%} {%include "check_icon.html"%} {%endif%}</div>
                     </td>
                     <td>Domain Matching</td>
                     <td>
@@ -208,8 +206,7 @@
                         <div>Your SSL Certificate is expired on {{result.certificate.valid_until}}</div>
                         {% else %}
                         <div>
-                            Your SSL Certificate is current .Your SSl certificate expires in {{result.certificate.days_until_expiration}}
-                            days. ({{result.certificate.valid_until}})
+                            Your SSL Certificate is current .Your SSl certificate expires in {{result.certificate.days_until_expiration}} days. ({{result.certificate.valid_until}})
                         </div>
                         {%endif%}
                     </td>
@@ -223,8 +220,8 @@
                     <td>
                         <div>You currently have {{result.certicate.protocol}} enabled.</div>
                         <div>
-                            This version of TLS is being phased out. This warning won't break your padlock, however if you run an eCommerce
-                            site, PCI requirements state that TLSv1 must be disabled by June 30, 2018.
+                            This version of TLS is being phased out. This warning won't break your padlock, however if you run an eCommerce site, PCI requirements state that TLSv1
+                            must be disabled by June 30, 2018.
                         </div>
                     </td>
                 </tr>
@@ -243,17 +240,16 @@
 <!-- About Block -->
 {%block about%} {%if not result.certificate and not result.error%}
 <section id="about" class="about section">
-    <div class="container" data-aos="fade-up">
+    <div class="container">
         <div class="row gx-0">
-            <div class="col-lg-12 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
+            <div class="col-lg-12 d-flex flex-column justify-content-center slide-up">
                 <div class="content">
                     <h2>About SSL Checker</h2>
                     <p>
-                        Utilize our efficient SSL Checker to swiftly identify any issues with your SSL certificate setup. This tool allows
-                        you to confirm that your SSL certificate is properly installed, valid, and trusted, ensuring a seamless experience
-                        for your users without any security warnings. Simply enter your server's public hostname (note that internal
-                        hostnames aren't supported) in the field below and hit 'Check SSL'. Our SSL Checker will handle the rest. If you're
-                        in need of an SSL certificate, we've got you covered.
+                        Utilize our efficient SSL Checker to swiftly identify any issues with your SSL certificate setup. This tool allows you to confirm that your SSL certificate
+                        is properly installed, valid, and trusted, ensuring a seamless experience for your users without any security warnings. Simply enter your server's public
+                        hostname (note that internal hostnames aren't supported) in the field below and hit 'Check SSL'. Our SSL Checker will handle the rest. If you're in need of
+                        an SSL certificate, we've got you covered.
                     </p>
                 </div>
             </div>

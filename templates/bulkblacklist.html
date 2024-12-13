@@ -5,12 +5,9 @@
 <title>Bulk BlackList Check | DNSLoader</title>
 <meta
     name="description"
-    content="Use our Bulk Blacklist tool to keep an eye on several IPs and domains. Verify blacklist status quickly across major databases to preserve domain reputation and email deliverability."
+    content="Use our Bulk Blacklist tool to keep an eye on several IPs and domains. Verify blacklist status quickly across major databases to preserve domain reputation and email deliverability."
 />
-<meta
-    name="keywords"
-    content="IP blacklist check, bulk blacklist lookup, domain reputation, blacklist databases, email deliverability, bulk blacklist lookup, and IP monitoring"
-/>
+<meta name="keywords" content="IP blacklist check, bulk blacklist lookup, domain reputation, blacklist databases, email deliverability, bulk blacklist lookup, and IP monitoring" />
 {% include 'headlink.html'%} {%endblock%}
 
 <!-- Script of page -->
@@ -39,9 +36,9 @@
 
 <!-- Form Block -->
 {%block form%}
-<h2 data-aos="fade-up" data-aos-delay="0" class=""><span>Bulk</span>Blacklist</h2>
-<div data-aos="fade-up" data-aos-delay="0" class="">
-    <div class="search-container">
+<h2><span>Bulk</span>Blacklist</h2>
+<div>
+    <div class="search-container slide-up">
         <div class="d-flex justify-content-center">
             <div>
                 <button onclick="changeType.bind({type:'bulk'})()" class="tb-button" id="bulk_btn" disabled>Check in range</button>
@@ -63,7 +60,7 @@
             </div>
             <div id="custom" style="display: none">
                 <div class="d-flex justify-content-center">
-                    <textarea name="ips" id="ips" rows="10" cols="30" placeholder="One IP per line (limited to 256 IPs)"> </textarea>
+                    <textarea name="ips" id="ips" rows="10" cols="30" placeholder="One IP per line (limited to 256 IPs)" style="height: 90px"> </textarea>
                 </div>
             </div>
             <div class="bulk-blacklist">
@@ -78,7 +75,7 @@
 
 <!-- Response Table -->
 {%block res_table%}
-<section id="table" class="table" style="display: none;">
+<section id="table" class="table tools-table" style="display: none">
     <div id="bulkblacklist-ajax-table"></div>
 </section>
 {%endblock%}
@@ -87,17 +84,16 @@
 {%block about%}
 <!-- If query is found in result -->
 <section id="about" class="about section">
-    <div class="container" data-aos="fade-up">
+    <div class="container">
         <div class="row gx-0">
-            <div class="col-lg-12 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
+            <div class="col-lg-12 d-flex flex-column justify-content-center slide-up">
                 <div class="content">
                     <h2>About Bulk Blacklist</h2>
                     <p>
-                        The Bulk Blacklist tool allows you to check multiple IP addresses or domains against a comprehensive list of
-                        DNS-based blacklists. This service ensures quick identification of any potential blacklist issues, which can affect
-                        email deliverability or domain reputation. By running bulk queries, you can efficiently monitor the status of
-                        multiple domains or IPs, making it a valuable resource for network administrators and businesses focused on security
-                        and email performance.
+                        The Bulk Blacklist tool allows you to check multiple IP addresses or domains against a comprehensive list of DNS-based blacklists. This service ensures
+                        quick identification of any potential blacklist issues, which can affect email deliverability or domain reputation. By running bulk queries, you can
+                        efficiently monitor the status of multiple domains or IPs, making it a valuable resource for network administrators and businesses focused on security and
+                        email performance.
                     </p>
                 </div>
             </div>

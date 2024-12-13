@@ -1,15 +1,7 @@
-<div
-    class="modal fade"
-    id="editModal"
-    data-bs-backdrop="static"
-    data-bs-keyboard="false"
-    tabindex="-1"
-    aria-labelledby="staticBackdropLabel"
-    aria-hidden="true"
->
+<div class="modal fade" id="editModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="{{url_for('fetch_ips')}}" method="post" id="editModal">
+            <form action="{{url_for('fetch_ips')}}" method="post" id="ips-edit-form">
                 <div class="modal-header">
                     <h5 class="modal-title d-flex align-items-center"><i class="bi bi-person-circle fs-3 me-2"></i>Add IP</h5>
                     <button type="reset" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -24,7 +16,7 @@
                         <input type="text" id="new_comment" name="new_comment" />
                     </div>
                     <div class="login-b">
-                        <button type="submit" class="search-button1">Save IP address</button>
+                        <button onclick="handleFormSubWithRecaptcha(event, 'ips-edit-form')" class="search-button1">Save IP address</button>
                     </div>
                 </div>
             </form>

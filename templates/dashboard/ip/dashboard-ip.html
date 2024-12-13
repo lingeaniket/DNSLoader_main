@@ -5,6 +5,11 @@
 <title>User Ips</title>
 <meta content="" name="description" />
 <meta content="" name="keywords" />
+<style>
+    input[type="file"] {
+        display: none;
+    }
+</style>
 
 {%endblock%}
 <!-- Include sidebar -->
@@ -15,7 +20,7 @@
 
 <!-- Main Block -->
 {%block main %}
-<section class="section dashboard">
+<section class="section dashboard tools-table">
     <div class="row">
         <div class="col-lg-12 col-md-12">
             <div class="card">
@@ -25,8 +30,7 @@
                         <thead>
                             <tr>
                                 <th>Sr. No</th>
-                                <th>IP</th>
-                                <th>Status</th>
+                                <th>IP Address</th>
                                 <th>RDNS</th>
                                 <th>Comments</th>
                                 <th>IP Group</th>
@@ -36,14 +40,13 @@
                         <tbody>
                             {%if result%} {%for ip in result.Ips %}
                             <tr>
-                                <td>{{ip[0]}}</td>
-                                <td>{{ip[1]}}</td>
-                                <td id="{{ip[1]}}-01">{{ip[3]}}</td>
-                                <td id="{{ip[1]}}-02">{{ip[4]}}</td>
-                                <td>{{ip[5]}}</td>
-                                <td>{{ip[11]}}</td>
-                                <td>
-                                    <button type="button" class="search-button1" onclick="editIP('{{ip[1]}}'+'|'+'{{ip[5]}}')" data-bs-toggle="modal" data-bs-target="#editModal">
+                                <td data-label="Sr. No">{{ip[0]}}</td>
+                                <td data-label="IP Address" id="{{ip[1]}}-01" class="tb-detected{{'1' if ip[3] == 'Clean' else ''}}">{{ip[1]}}</td>
+                                <td data-label="RDNS" id="{{ip[1]}}-02">{{ip[5]}}</td>
+                                <td data-label="Comments">{{ip[6]}}</td>
+                                <td data-label="IP Group">{{ip[12]}}</td>
+                                <td data-label="Action">
+                                    <button type="button" class="search-button1" onclick="editIP('{{ip[1]}}'+'|'+'{{ip[6]}}')" data-bs-toggle="modal" data-bs-target="#editModal">
                                         Edit
                                     </button>
                                 </td>
@@ -65,13 +68,13 @@
                     <div class="login-b">
                         <button type="button" class="search-button1" data-bs-toggle="modal" data-bs-target="#loginModal">Add IP address</button>
                         <div style="margin-left: 15px">
-                            <form onsubmit="callFetchIPs(event)">
-                                <button class="search-button1" type="submit">Fetch IPs</button>
+                            <form onsubmit="callFetchIPs(event)" id="fetch-ips-form">
+                                <button class="search-button1" onclick="handleFormSubWithRecaptcha(event, 'fetch-ips-form')" id="fetch-ips">Fetch IPs</button>
                             </form>
                         </div>
                         <div style="margin-left: 15px">
-                            <form onsubmit="callFetchRdns(event)">
-                                <button class="search-button1" type="submit">Fetch RDNS</button>
+                            <form onsubmit="callFetchRdns(event)" id="fetch-rdns-form">
+                                <button class="search-button1" onclick="handleFormSubWithRecaptcha(event, 'fetch-rdns-form')" id="fetch-rdns">Fetch RDNS</button>
                             </form>
                         </div>
                     </div>
@@ -90,4 +93,13 @@
 <!-- Scripts Block -->
 {%block script_down%}
 <script src="/static/js/scripts/dashboard/ip/dashboard-ip.js"></script>
+<script>
+    const fileInput = document.getElementById("file-upload");
+    const fileNameDisplay = document.getElementById("file-name");
+
+    fileInput.addEventListener("change", () => {
+        const fileName = fileInput.files[0]?.name || "No file selected";
+        fileNameDisplay.textContent = fileName;
+    });
+</script>
 {%endblock%}

@@ -5,16 +5,16 @@ function fetchips() {
 
         const spinnTd = document.getElementById(`${data.ip}-01`);
         if (spinnTd) {
+            spinnTd.innerHTML = data.ip;
             if (data.is_blacklisted) {
-                spinnTd.innerHTML = "Blacklisted";
+                spinnTd.className = "tb-detected";
             } else {
-                spinnTd.innerHTML = "Clean";
+                spinnTd.className = "tb-detected1";
             }
         }
     };
 
     eventsource.onerror = function () {
-        console.error("Error occurred while streaming data");
         eventsource.close(); // Close the connection
     };
 }
@@ -31,11 +31,28 @@ function callFetchIPs(event) {
 
             for (const ip in ips) {
                 const statusTd = document.getElementById(`${ips[ip]}-01`);
-                statusTd.innerHTML = "";
-                const inSpinn = document.createElement("div");
-                inSpinn.classList.add("spinner");
-                statusTd.appendChild(inSpinn);
+                if (statusTd) {
+                    statusTd.innerHTML = "";
+                    const inSpinn = document.createElement("div");
+                    inSpinn.classList.add("spinner");
+                    statusTd.appendChild(inSpinn);
+                }
             }
+            const subBtn = document.getElementById("fetch-ips");
+
+            let coundown = 15;
+
+            const timer = setInterval(() => {
+                subBtn.innerHTML = `Please Wait for ${coundown} seconds`;
+
+                if (coundown == 0) {
+                    clearInterval(timer);
+                    subBtn.innerHTML = "Fetch IPs";
+                    subBtn.removeAttribute("disabled");
+                }
+                coundown--;
+            }, 1000);
+            subBtn.setAttribute("disabled", "true");
             fetchips();
         });
 }
@@ -45,14 +62,12 @@ function fetchrdns() {
     eventsource.onmessage = function (event) {
         const data = JSON.parse(event.data);
         console.log(data);
-
         const spinnTd = document.getElementById(`${data.ip}-02`);
         if (spinnTd) {
             spinnTd.innerHTML = data.rdns;
         }
     };
     eventsource.onerror = function () {
-        console.error("Error occurred while streaming data");
         eventsource.close(); // Close the connection
     };
 }
@@ -63,11 +78,9 @@ function callFetchRdns(event) {
         .then((response) => response.json())
         .then((response) => {
             const ips = response.ips;
-            
+
             for (const ip in ips) {
                 const statusTd = document.getElementById(`${ips[ip]}-02`);
-
-                console.log(statusTd)
 
                 if (statusTd) {
                     statusTd.innerHTML = "";
@@ -76,7 +89,22 @@ function callFetchRdns(event) {
                     statusTd.appendChild(inSpinn);
                 }
             }
-            // fetchrdns();
+            const subBtn = document.getElementById("fetch-rdns");
+
+            let coundown = 15;
+
+            const timer = setInterval(() => {
+                subBtn.innerHTML = `Please Wait for ${coundown} seconds`;
+
+                if (coundown == 0) {
+                    clearInterval(timer);
+                    subBtn.innerHTML = "Fetch RDNS";
+                    subBtn.removeAttribute("disabled");
+                }
+                coundown--;
+            }, 1000);
+            subBtn.setAttribute("disabled", "true");
+            fetchrdns();
         });
 }
 
@@ -95,11 +123,11 @@ function showComponent(button) {
         button1.removeAttribute("disabled");
     });
     if (name == "range") {
-        form.action = "{{url_for('ips_add_range')}}";
+        form.action = "/ips-add-range";
     } else if (name == "custom") {
-        form.action = "{{url_for('ips_add_custom')}}";
+        form.action = "/ips-add-custom";
     } else if (name == "file-input") {
-        form.action = "{{url_for('ips_add_csv')}}";
+        form.action = "/ips-add-csv";
         form.enctype = "multipart/form-data";
     }
 
@@ -113,7 +141,6 @@ function showComponent(button) {
 }
 function editIP(ip_obj) {
     const [ip, comment] = ip_obj.split("|");
-    console.log(ip_obj);
     let oldElement = document.getElementById("old_ip");
     oldElement.value = ip;
     let newElement = document.getElementById("new_ip");
@@ -124,4 +151,10 @@ function editIP(ip_obj) {
     oldComment.value = comment;
     let newComment = document.getElementById("new_comment");
     newComment.value = comment;
+}
+
+function handleFormSubWithRecaptcha(event, formid) {
+    event.preventDefault();
+    window.formid = formid;
+    grecaptcha.execute();
 }

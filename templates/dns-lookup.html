@@ -6,33 +6,33 @@
     name="description"
     content="To see and validate DNS records, improve domain security, and resolve DNS problems, instantly execute DNS Lookups. Verify DNS settings to improve online presence and performance."
 />
-<meta
-    name="keywords"
-    content="Domain name system, DNS configuration, DNS lookup, DNS records check, DNS troubleshooting, domain security, and DNS records verification"
-/>
+<meta name="keywords" content="Domain name system, DNS configuration, DNS lookup, DNS records check, DNS troubleshooting, domain security, and DNS records verification" />
 <title>DNS Lookup | DNSLoader</title>
 {% include 'headlink.html'%} {%endblock%}
 
 <!-- Script block -->
 {%block script %}
-<script src="/static/js/scripts/dnslookup.js"></script>
+<script>
+    function validate(event) {
+        event.preventDefault();
+        if (!document.getElementById("domain").value) {
+            alert("You must add text to the required field");
+        } else {
+            window.formid = "dns-lookup-form";
+            grecaptcha.execute();
+        }
+    }
+</script>
 {%endblock%}
 
 <!-- Form of page -->
 {%block form %}
-<h2 data-aos="fade-up" data-aos-delay="100" class=""><span>DNS</span>Lookup</h2>
-<div data-aos="fade-up" data-aos-delay="300" class="">
-    <div class="search-container">
-        <form action="{{ url_for('dnslookup')}}" method="POST">
-            <input
-                type="text"
-                placeholder="Search..."
-                name="domain"
-                id="domain"
-                value="{{ result.query if result.query else '' }}"
-                class="search-input"
-            />
-            <button type="submit" class="search-button">Search</button>
+<h2><span>DNS</span>Lookup</h2>
+<div>
+    <div class="search-container slide-up {{'searched' if result.fetched else ''}}">
+        <form action="{{ url_for('dnslookup')}}" method="POST" id="dns-lookup-form" style="display: flex; align-items: center; gap: 10px; position: relative">
+            <input type="text" placeholder="Enter domain name" name="domain" id="domain" value="{{ result.query if result.query else '' }}" class="search-input" />
+            <button type="submit" class="search-button" id="Submit">Search</button>
             <div id="loader" class="loader"></div>
         </form>
         <div id="error-message"></div>
@@ -42,7 +42,7 @@
 
 <!-- Response Table -->
 {%block res_table%} {%if result.query%}
-<section id="table" class="table">
+<section id="table" class="table tools-table">
     <div class="table-contant">
         <div class="table-contant">
             <h4 style="text-align: center">Result for {{result.query}}</h4>
@@ -62,12 +62,12 @@
         <tbody>
             {% for record in result.results %}
             <tr>
-                <td>{{result.domain}}</td>
-                <td>{{record}}</td>
+                <td data-label="Domain Name">{{result.domain}}</td>
+                <td data-label="IP Address">{{record}}</td>
                 <td>
                     <form action="{{url_for('blacklist')}}" method="post">
                         <input type="text" name="ip" value="{{record}}" style="display: none" />
-                        <button class="search-button-in" type="submit">blacklist check</button>
+                        <button class="search-button-in" type="submit">Blacklist Check</button>
                     </form>
                 </td>
             </tr>
@@ -81,15 +81,15 @@
 <!-- About Section -->
 {%block about%} {%if not result.query%}
 <section id="about" class="about section">
-    <div class="container" data-aos="fade-up">
+    <div class="container">
         <div class="row gx-0">
-            <div class="col-lg-12 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
+            <div class="col-lg-12 d-flex flex-column justify-content-center slide-up">
                 <div class="content">
                     <h2>About DNS Lookup</h2>
                     <p>
-                        DNS records for a domain will be listed in this test's priority order. Changes to DNS Records should take effect
-                        immediately because the domain's authoritative name server is the first thing that the DNS lookup looks for. If you
-                        provide the DNS lookup tool a name, it will return an IP address by default.
+                        DNS records for a domain will be listed in this test's priority order. Changes to DNS Records should take effect immediately because the domain's
+                        authoritative name server is the first thing that the DNS lookup looks for. If you provide the DNS lookup tool a name, it will return an IP address by
+                        default.
                     </p>
                 </div>
             </div>

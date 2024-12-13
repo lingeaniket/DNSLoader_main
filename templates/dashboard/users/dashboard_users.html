@@ -11,7 +11,7 @@
 {%set isLoggedIn=True%}{%set fullname=result.fullname%} {%set username=result.username%}{%set user_role=result.role%}
 <!-- Main HTML -->
 {%include "dashboard/profile_sidebar.html"%} {%endblock%} {%block main %}
-<section class="section">
+<section class="section tools-table">
     <div class="row">
         <div class="col-lg-12 col-md-12">
             <div class="card">
@@ -22,7 +22,7 @@
                     <table class="styled-table">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <!-- <th>ID</th> -->
                                 <th>First Name</th>
                                 <th>Last Name</th>
                                 <th>E-mail</th>
@@ -33,21 +33,21 @@
                         <tbody>
                             {%if result%} {%for data in result.result%}
                             <tr>
-                                <td>{{data[0]}}</td>
-                                <td>{{data[1]}}</td>
-                                <td>{{data[2]}}</td>
-                                <td>{{data[3]}}</td>
-                                <td>{{data[6]}}</td>
-                                <td>
+                                <!-- <td>{{data[0]}}</td> -->
+                                <td data-label="First Name">{{data[1]}}</td>
+                                <td data-label="Last Name">{{data[2]}}</td>
+                                <td data-label="E-mail">{{data[3]}}</td>
+                                <td data-label="Username">{{data[5]}}</td>
+                                <td data-label="Action">
                                     {%if data[9]==1%}
-                                    <button type="button" class="search-button1" onclick="denyUser('{{data[3]}}')" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                    <button type="button" class="search-button1" onclick="denyUser('{{data[3]}}')" data-bs-toggle="modal" data-bs-target="#deleteUserModal">
                                         Delete User
                                     </button>
                                     {%else%}
-                                    <button type="button" class="search-button1" onclick="denyUser('{{data[3]}}')" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                    <button type="button" class="search-button1" onclick="denyUser('{{data[3]}}')" data-bs-toggle="modal" data-bs-target="#denyUserModal">
                                         Deny
                                     </button>
-                                    <button type="button" class="search-button1" onclick="approveUser('{{data[3]}}')" data-bs-toggle="modal" data-bs-target="#editModal">
+                                    <button type="button" class="search-button1" onclick="approveUser('{{data[3]}}')" data-bs-toggle="modal" data-bs-target="#approveUserModal">
                                         Approve
                                     </button>
                                     {%endif%}
@@ -56,76 +56,12 @@
                             {%endfor%} {%endif%}
                         </tbody>
                     </table>
-                    <!-- End Dark Table -->
-                    <!-- <div class="login-b">
-                    <button type="button" class="search-button1 " data-bs-toggle="modal"
-                        data-bs-target="#loginModal">
-                        Add Group
-                    </button>
-                </div> -->
-
-                    <!-- Modal -->
-
-                    <!-- edit group -->
-                    <div
-                        class="modal fade"
-                        id="editModal"
-                        data-bs-backdrop="static"
-                        data-bs-keyboard="false"
-                        tabindex="-1"
-                        aria-labelledby="staticBackdropLabel"
-                        aria-hidden="true"
-                    >
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <form action="/admin_user_action?email={{email}}&action=Approved" method="post" id="approve-user">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title d-flex align-items-center"><i class="bi bi-person-circle fs-3 me-2"></i>Approve User</h5>
-                                        <button type="reset" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="mb-3">
-                                            <div>
-                                                <label class="form-label">Approve User</label>
-
-                                                <!-- <input type="text" id="new_name" name="new_name"> -->
-                                            </div>
-                                        </div>
-                                        <div class="login-b">
-                                            <button type="submit" class="search-button1" data-bs-toggle="modal" data-bs-target="#editModal">Okay</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- delete group name -->
-                    <div
-                        class="modal fade"
-                        id="deleteModal"
-                        data-bs-backdrop="static"
-                        data-bs-keyboard="false"
-                        tabindex="-1"
-                        aria-labelledby="staticBackdropLabel"
-                        aria-hidden="true"
-                    >
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <form action="/admin_user_action?email={{email}}&action=Deny" method="post" id="deny-user">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title d-flex align-items-center"><i class="bi bi-person-circle fs-3 me-2"></i>Deny User</h5>
-                                        <button type="reset" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="login-b">
-                                            <button type="submit" class="search-button1" data-bs-toggle="modal" data-bs-target="#deleteModal">Okay</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Approve User Modal -->
+                    {%include "dashboard/users/users-approve-modal.html"%}
+                    <!-- Deny User Modal -->
+                    {%include "dashboard/users/users-deny-modal.html"%}
+                    <!-- Delete User Modal -->
+                    {%include "dashboard/users/users-delete-modal.html"%}
                 </div>
             </div>
         </div>
@@ -134,35 +70,5 @@
 {%endblock%}
 <!-- Scripts -->
 {%block script_down%}
-<script>
-    function approveUser(email) {
-        //let approveElement = document.getElementById("approve-user");
-        let approveFormElement = document.getElementById("approve-user");
-        approveFormElement.onsubmit = function (e) {
-            e.preventDefault();
-            fetch(`{{url_for('dashboard_users_actions')}}?email=${email}&action=Approved`, { method: "POST" })
-                .then((resp) => {
-                    return resp.json();
-                })
-                .then((response) => {
-                    console.log(response);
-                    window.location.reload();
-                });
-        };
-    }
-    function denyUser(email) {
-        let approveFormElement = document.getElementById("deny-user");
-        approveFormElement.onsubmit = function (e) {
-            e.preventDefault();
-            fetch(`{{url_for('dashboard_users_actions')}}?email=${email}&action=Deny`, { method: "POST" })
-                .then((resp) => {
-                    return resp.json();
-                })
-                .then((response) => {
-                    console.log(response);
-                    window.location.reload();
-                });
-        };
-    }
-</script>
+<script src="/static/js/scripts/dashboard/users/dashboard-users.js"></script>
 {%endblock%}

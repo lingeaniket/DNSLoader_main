@@ -1,65 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-        <meta
-            name="description"
-            content="Greetings from DNSLoader, your one-stop shop for DNS services and tools. To improve your online visibility and security, use extensive capabilities like DNS Lookup, WHOIS Lookup, MX Lookup, SSL Checker, and more."
-        />
-        <meta
-            name="keywords"
-            content="DNSLoader, DNS tools, IP lookup, bulk blacklist, WHOIS lookup, MX lookup, SSL checker, network security, and domain management"
-        />
-        <title>DNS Loader</title>
-        {%include 'headlink.html' %}
-    </head>
-    <body class="index-page">
-        {% include "header.html"%}
-        <main class="main">
-            <section id="hero" class="hero section">
-                <div class="container d-flex flex-column align-items-center">
-                    <h2 data-aos="fade-up" data-aos-delay="100" class=""><span>Mx</span>Lookup</h2>
-                    <div data-aos="fade-up" data-aos-delay="300" class="">
-                        <div class="search-container">
-                            <form action="{{ url_for('mxlookup')}}" method="post">
-                                <input type="text" placeholder="Search..." name="domain" class="search-input" />
-                                <button type="submit" class="search-button">Search</button>
-                                <div class="g-recaptcha" data-sitekey="6Lf1ZE4qAAAAAE-NSbeNBav3idxGjxYheBiFvlOk"></div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            {% include 'about.html' %} {% include 'values.html' %}
-        </main>
-        <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
-            <i class="bi bi-arrow-up-short"></i>
-        </a>
-        {% include 'footer.html' %}
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const elements = document.querySelectorAll(".slide-up"); // Select elements with 'slide-up' class
+{%extends 'tools-template.html' %} {%block title %}
 
-                const observer = new IntersectionObserver(
-                    (entries, observer) => {
-                        entries.forEach((entry) => {
-                            if (entry.isIntersecting) {
-                                entry.target.classList.add("active"); // Add 'active' class when element is in view
-                                observer.unobserve(entry.target); // Stop observing once the element is revealed
-                            }
-                        });
-                    },
-                    {
-                        threshold: 0.1, // Trigger when 10% of the element is visible
-                    },
-                );
+<meta
+    name="description"
+    content="Greetings from DNSLoader, your one-stop shop for DNS services and tools. To improve your online visibility and security, use extensive capabilities like DNS Lookup, WHOIS Lookup, MX Lookup, SSL Checker, and more."
+/>
+<meta name="keywords" content="DNSLoader, DNS tools, IP lookup, bulk blacklist, WHOIS lookup, MX lookup, SSL checker, network security, and domain management" />
+<title>DNSLoader - Your Gateway to Advanced DNS Tools & Network Security Solutions</title>
 
-                elements.forEach((element) => {
-                    observer.observe(element); // Start observing each element
-                });
-            });
-        </script>
-        {% include "scripts.html"%}
-    </body>
-</html>
+{%endblock%} {%block form %}
+<h2><span>Mx</span>Lookup</h2>
+<div>
+    <div class="search-container">
+        <form action="{{ url_for('mxlookup')}}" method="post">
+            <input type="text" placeholder="Search..." name="domain" class="search-input" />
+            <button type="submit" id="Submit" class="search-button">Search</button>
+        </form>
+    </div>
+</div>
+{%endblock%} {%block res_table%} {% include 'about.html' %} {% include 'values.html' %} {%endblock%}

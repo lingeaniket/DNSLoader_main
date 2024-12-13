@@ -15,24 +15,28 @@
 
 <!-- Script of page -->
 {%block script%}
-<script src="/static/js/scripts/blacklist.js"></script>
+<!-- <script src="/static/js/scripts/blacklist.js"></script> -->
+<script>
+    function validate(event) {
+        event.preventDefault();
+        if (!document.getElementById("ip").value) {
+            alert("You must add text to the required field");
+        } else {
+            window.formid = "blacklist-form";
+            grecaptcha.execute();
+        }
+    }
+</script>
 {%endblock%}
 
 <!-- Form of the page -->
 {%block form%}
-<h2 data-aos="fade-up" data-aos-delay="0" class=""><span>Black</span>List</h2>
-<div data-aos="fade-up" data-aos-delay="0" class="">
-    <div class="search-container">
-        <form action="{{ url_for('blacklist') }}" method="POST">
-            <input
-                type="text"
-                placeholder="Search..."
-                value="{{ result.query if result.query else '' }}"
-                name="ip"
-                id="ip"
-                class="search-input"
-            />
-            <button type="submit" id="submit" class="search-button">Search</button>
+<h2><span>Black</span>List</h2>
+<div>
+    <div class="search-container slide-up {{'searched' if result.fetched else ''}}">
+        <form action="{{ url_for('blacklist') }}" id="blacklist-form" method="POST" style="display: flex; align-items: center; gap: 10px">
+            <input type="text" placeholder="Enter domain name or IP adddress" value="{{ result.query if result.query else '' }}" name="ip" id="ip" class="search-input" />
+            <button type="submit" id="Submit" class="search-button">Check</button>
             <div id="loader" class="loader"></div>
         </form>
         <div id="error-message"></div>
@@ -85,10 +89,7 @@
         <tbody>
             {% for provider in result.result.providers %}
             <tr>
-                <td>
-                    {% if provider in result.result.detected_on%} {%include "cross_icon.html"%} {%else%} {%include "check_icon.html"%}
-                    {%endif%}
-                </td>
+                <td>{% if provider in result.result.detected_on%} {%include "cross_icon.html"%} {%else%} {%include "check_icon.html"%} {%endif%}</td>
                 <td>{{provider}}</td>
             </tr>
             {%endfor%}
@@ -101,16 +102,15 @@
 <!-- About section -->
 {%block about%} {%if not result.query %}
 <section id="about" class="about section">
-    <div class="container" data-aos="fade-up">
+    <div class="container">
         <div class="row gx-0">
-            <div class="col-lg-12 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
+            <div class="col-lg-12 d-flex flex-column justify-content-center slide-up">
                 <div class="content">
                     <h2>About Blacklist</h2>
                     <p>
-                        The blacklist check compares the IP address of a mail server to more than 70 DNS-based email blacklists. (Usually
-                        referred to as RBL, DNSBL, or Realtime Blacklist). Certain emails you send could not be delivered if your mail
-                        server has been blocked. Blacklists of emails are a popular method of lowering spam. Start with an MX Lookup if you
-                        are unsure of the address of your mail server. Alternatively, just send contact@dnsloader.com an email.
+                        The blacklist check compares the IP address of a mail server to more than 70 DNS-based email blacklists. (Usually referred to as RBL, DNSBL, or Realtime
+                        Blacklist). Certain emails you send could not be delivered if your mail server has been blocked. Blacklists of emails are a popular method of lowering spam.
+                        Start with an MX Lookup if you are unsure of the address of your mail server. Alternatively, just send contact@dnsloader.com an email.
                     </p>
                 </div>
             </div>

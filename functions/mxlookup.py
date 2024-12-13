@@ -8,7 +8,7 @@ from flask import render_template, request
 def mxlookup_route():
 
     if request.method == "GET":
-        return render_template("mxlookup.html", result={})
+        return render_template("mxlookup.html", result={"fetched": False})
     elif request.method == "POST":
 
         # define the variables
@@ -20,8 +20,8 @@ def mxlookup_route():
             # Fetch MX Records
             mx_records = dns.resolver.query(domain, "MX")
             for record in mx_records:
-                recordsv4 = {"pref": "", "hostname": "", "ip": ""}
-                recordsv6 = {"pref": "", "hostname": "", "ip": ""}
+                recordsv4 = {"pref": "", "hostname": "", "ip": "", "v4": True}
+                recordsv6 = {"pref": "", "hostname": "", "ip": "", "v4": False}
 
                 mail_server = record.exchange.to_text()  # get the mail server/hostname
 
@@ -49,6 +49,8 @@ def mxlookup_route():
                     recordsv6["ip"] = "NA"
                 myresult.insert(1, recordsv6)  # add IPv6 records to end result
 
+            myresult.sort(key=lambda x: (x["pref"], x["hostname"], not x["v4"]))
+
         except dns.resolver.NoAnswer:  # if no answer from server for given domain
             print(f"No MX records found for {domain}")
             # return results with given error
@@ -58,6 +60,7 @@ def mxlookup_route():
                     "results": myresult,
                     "query": domain,
                     "error": f"Sorry, we couldn't find any name servers for '{domain}'",
+                    "fetched": True,
                 },
             )
         except dns.resolver.NXDOMAIN:  # if domain not exist
@@ -69,6 +72,7 @@ def mxlookup_route():
                     "results": myresult,
                     "query": domain,
                     "error": f"Sorry, we couldn't find any name servers for '{domain}'",
+                    "fetched": True,
                 },
             )
         except Exception as e:  # if exception is raised in code
@@ -80,13 +84,21 @@ def mxlookup_route():
                     result={
                         "error": f"Sorry, we couldn't find any name servers for '{domain}'",
                         "query": domain,
+                        "fetched": True,
                     },
                 )
             # else return template with only query
             else:
-                return render_template("mxlookup.html", result={"query": domain})
+                return render_template(
+                    "mxlookup.html", result={"query": domain, "fetched": True}
+                )
         # if everything is OK, return template with results, domain and query
         return render_template(
             "mxlookup.html",
-            result={"results": myresult, "domain": domain, "query": domain},
+            result={
+                "results": myresult,
+                "domain": domain,
+                "query": domain,
+                "fetched": True,
+            },
         )

@@ -27,6 +27,8 @@
                 }
             }
         </style>
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        <script src="static/js/scripts/tools.js"></script>
     </head>
     <body>
         {%block sidebar %}{%endblock%}
@@ -41,6 +43,8 @@
         </a>
         <div id="footer1">{%include "footer.html"%}</div>
         <!-- Scripts -->
+        <div class="g-recaptcha" data-callback="onSubmit" data-size="invisible" data-sitekey="6Lf1ZE4qAAAAAE-NSbeNBav3idxGjxYheBiFvlOk"></div>
+
         {%include "scripts.html"%}
         <!-- Scripts Block -->
         {%block script_down%} {%endblock%}

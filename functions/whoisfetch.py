@@ -30,7 +30,7 @@ def getProperDate(date):
 
 def whoisfetch_route():
     if request.method == "GET":
-        return render_template("whois.html", result={})
+        return render_template("whois.html", result={"fetched": False})
 
     whoisdata = ""
     rawData = ""
@@ -77,10 +77,16 @@ def whoisfetch_route():
                 "error": "Given domain is not valid",
                 "domain": domain,
                 "raw": "",
+                "fetched": True,
             },
         )
     # return result, row and raw data
     return render_template(
         "whois.html",
-        result={"domain": domain, "row": whoisdata, "raw": whoisRawdata},
+        result={
+            "domain": domain,
+            "row": whoisdata,
+            "raw": whoisRawdata,
+            "fetched": True,
+        },
     )

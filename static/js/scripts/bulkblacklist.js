@@ -41,7 +41,21 @@ function get_results() {
     };
 
     eventSource.onerror = function () {
-        console.error("Error occurred while streaming data");
+        const subBtn = document.getElementById("Submit");
+
+        let coundown = 60;
+
+        const timer = setInterval(() => {
+            subBtn.innerHTML = `Please Wait for ${coundown} seconds`;
+
+            if (coundown == 0) {
+                clearInterval(timer);
+                subBtn.innerHTML = "Check";
+                subBtn.removeAttribute("disabled");
+            }
+            coundown--;
+        }, 1000);
+        subBtn.setAttribute("disabled", "true");
         eventSource.close(); // Close the connection
     };
 }

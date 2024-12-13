@@ -10,6 +10,8 @@ def ips_add_custom_route():
         owner_id = session.get("user_id")
         # get ips array from form, strip it to remove spaces and splitlines to get ips per line
         ips = request.form.get("ips", "").strip().splitlines()
+        ipgroup = request.form.get("ipgroup")
+
         # to get ip and its comments split the each ips string by "//",
         # as first should be ip and second should be comment for that particular ip
         ips = [ip.strip().split("//") for ip in ips]
@@ -17,7 +19,7 @@ def ips_add_custom_route():
         # initialize the cursor
         mycursor = mysql.connection.cursor()
         # create a insert query string
-        insert_query = """INSERT INTO tblips(ipaddress,ownerid,comments) values(%s,%s,%s)
+        insert_query = """INSERT INTO tblips(ipaddress,ownerid,comments,ipgroup) values(%s,%s,%s,%s)
                         ON DUPLICATE KEY UPDATE ipaddress=Values(ipaddress)"""
 
         # we are adding ips in batch to database to avoid overflow issues
@@ -26,7 +28,11 @@ def ips_add_custom_route():
         # as each element in ips is a array so, first should be ip and second should be comment for that ip
         # ip[0]-> ip address, ip[1]-> comment for that ip address
         prepared_data = [
-            (ip[0], owner_id, ip[1]) if ip.__len__() > 1 else (ip[0], owner_id, None)
+            (
+                (ip[0], owner_id, ip[1], ipgroup)
+                if ip.__len__() > 1
+                else (ip[0], owner_id, None, ipgroup)
+            )
             for ip in ips
         ]
 
@@ -40,6 +46,6 @@ def ips_add_custom_route():
         mycursor.connection.commit()
 
         # After completion redirect to ip dashboard
-        return redirect(url_for("dashboard/ip/dashboard_ip"))
+        return redirect(url_for("dashboard_ip"))
     else:
         return render_template("dashboard/ip/dashboard_ip.html")

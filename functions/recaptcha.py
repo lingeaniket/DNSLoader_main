@@ -1,6 +1,7 @@
 import requests
 
-from flask import  jsonify, request
+from flask import jsonify, request
+
 
 def validate_recaptcha_route():
     recaptcha_response = request.form.get("g-recaptcha-response")

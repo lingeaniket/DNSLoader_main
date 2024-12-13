@@ -2,9 +2,15 @@
 
 <!-- Title Block -->
 {%block title%}
-<meta content="" name="description" />
-<meta content="" name="keywords" />
-<title>Profile - DNSLoader</title>
+<meta
+    content="Manage your DNS settings effortlessly with the DNSLoader Dashboard. Access powerful tools for DNS lookups, monitoring, troubleshooting, and network optimization."
+    name="description"
+/>
+<meta
+    content="DNSLoader Dashboard, DNS tools, DNS management, DNS monitoring, DNS lookup, MX lookup, WHOIS lookup, SSL checker, network troubleshooting, DNS analytics"
+    name="keywords"
+/>
+<title>DNSLoader | User Profile</title>
 {%endblock%} {%block sidebar %} {%set tab="profile"%} {%set isLoggedIn=True%}{%set fullname=result.fullname%} {%set username=result.username%} {%set user_role=result.role%}
 <!-- Include sidebar -->
 {%include "dashboard/profile_sidebar.html"%} {%endblock%}

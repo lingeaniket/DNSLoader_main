@@ -1,0 +1,35 @@
+@media screen and (max-width: 768px) {
+    .tools-table table,
+    .tools-table thead,
+    .tools-table tbody,
+    .tools-table th,
+    .tools-table td,
+    .tools-table tr {
+        display: block;
+    }
+
+    .tools-table thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    .tools-table td {
+        border: none;
+        border-bottom: 1px solid #ddd;
+        position: relative;
+        padding-left: 50%;
+        text-align: right;
+    }
+
+    .tools-table td:before {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        width: 45%;
+        white-space: nowrap;
+        content: attr(data-label);
+        font-weight: bold;
+        text-align: left;
+    }
+}

@@ -6,33 +6,33 @@
     name="description"
     content="Use our MX Lookup tool to examine and validate MX records quickly. Strengthen the email security of your domain, avoid misrouted emails, and guarantee dependable email delivery. Now is the time to begin optimizing your email infrastructure!"
 />
-<meta
-    name="keywords"
-    content="Email routing, domain email security, mail server lookup, MX records analysis, email server check, and MX records verification"
-/>
+<meta name="keywords" content="Email routing, domain email security, mail server lookup, MX records analysis, email server check, and MX records verification" />
 {% include 'headlink.html'%}
 <title>Mx Lookup | DNSLoader</title>
 {%endblock%}
 
 <!-- Script Block -->
 {%block script%}
-<script src="/static/js/scripts/mxlookup.js"></script>
+<script>
+    function validate(event) {
+        event.preventDefault();
+        if (!document.getElementById("domain").value) {
+            alert("You must add text to the required field");
+        } else {
+            window.formid = "mx-lookup-form";
+            grecaptcha.execute();
+        }
+    }
+</script>
 {%endblock%}
 
 <!-- Form Block -->
 {%block form%}
-<h2 data-aos="fade-up" data-aos-delay="0" class=""><span>Mx</span>Lookup</h2>
-<div data-aos="fade-up" data-aos-delay="0" class="">
-    <div class="search-container">
-        <form action="{{url_for('mxlookup')}}" method="post" id="form-to-submit">
-            <input
-                type="text"
-                placeholder="Search..."
-                name="domain"
-                id="domain"
-                value="{{ result.query if result.query else '' }}"
-                class="search-input"
-            />
+<h2><span>Mx</span>Lookup</h2>
+<div>
+    <div class="search-container slide-up {{'searched' if result.fetched else ''}}">
+        <form action="{{url_for('mxlookup')}}" method="post" id="mx-lookup-form" style="display: flex; align-items: center; gap: 10px">
+            <input type="text" placeholder="Enter domain name" name="domain" id="domain" value="{{ result.query if result.query else '' }}" class="search-input" />
             <button id="Submit" type="submit" class="search-button">Search</button>
             <div id="loader" class="loader"></div>
         </form>
@@ -43,7 +43,7 @@
 
 <!-- Response Table -->
 {%block res_table%} {%if result.query%}
-<section id="table" class="table">
+<section id="table" class="table tools-table">
     <div class="table-contant">
         <div class="table-contant">
             <h4>Result for {{result.query}}</h4>
@@ -52,54 +52,28 @@
     {%if result.error %}
     <h4 class="error-message">{{result.error}}</h4>
     {%elif result.domain %}
-    <table class="styled-table mx-lookup">
+    <table class="styled-table">
         <thead>
             <tr>
                 <th>Pref</th>
-                <th>hostname</th>
-                <th>Ip addresses</th>
-                <th></th>
+                <th>Host Name</th>
+                <th>Ip Address</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
             {% for record in result.results %} {%if record.ip == "NA"%} {%else%}
             <tr>
-                <td>{{record.pref}}</td>
-                <td>{{record.hostname}}</td>
-                <td>{{record.ip}}</td>
+                <td data-label="Pref">{{record.pref}}</td>
+                <td data-label="Host Name">{{record.hostname}}</td>
+                <td data-label="Ip Address">{{record.ip}}</td>
                 <td>
+                    {%if record.v4%}
                     <form action="{{url_for('blacklist')}}" method="post">
                         <input type="text" name="ip" value="{{record.ip}}" style="display: none" />
                         <button class="search-button-in" type="submit">Blacklist Check</button>
                     </form>
-                </td>
-                <td>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>Pref</td>
-                                <td>{{record.pref}}</td>
-                            </tr>
-                            <tr>
-                                <td>Hostname</td>
-                                <td>{{record.hostname}}</td>
-                            </tr>
-                            <tr>
-                                <td>IP Address</td>
-                                <td>{{record.ip}}</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    <form action="{{url_for('blacklist')}}" method="post">
-                                        <input type="text" name="ip" value="{{record.ip}}" style="display: none" />
-                                        <button class="search-button-in" type="submit">Blacklist Check</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    {%endif%}
                 </td>
             </tr>
             {%endif%} {% endfor %}
@@ -112,16 +86,15 @@
 <!-- About Block -->
 {%block about%} {%if not result.query%}
 <section id="about" class="about section">
-    <div class="container" data-aos="fade-up">
+    <div class="container">
         <div class="row gx-0">
-            <div class="col-lg-12 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
+            <div class="col-lg-12 d-flex flex-column justify-content-center slide-up">
                 <div class="content">
                     <h2>About MX Lookup</h2>
                     <p>
-                        The MX records for a domain will be listed in this test's priority order. Changes to MX Records should take effect
-                        immediately because the domain's authoritative name server is the first target of the MX lookup. By selecting
-                        Diagnostics, you may establish a connection with the mail server, confirm reverse DNS records, run a quick Open
-                        Relay test, and gauge response time performance. Additionally, you can compare every MX record (IP address) to 90
+                        The MX records for a domain will be listed in this test's priority order. Changes to MX Records should take effect immediately because the domain's
+                        authoritative name server is the first target of the MX lookup. By selecting Diagnostics, you may establish a connection with the mail server, confirm
+                        reverse DNS records, run a quick Open Relay test, and gauge response time performance. Additionally, you can compare every MX record (IP address) to 90
                         DNS-based blacklists.
                     </p>
                 </div>

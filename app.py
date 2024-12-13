@@ -40,7 +40,6 @@ from functions.dashboard.ips_add_custom import ips_add_custom_route
 from functions.dashboard.dashboard_profile import dashboard_profile_route
 from functions.dashboard.dashboard_ip_group import dashboard_ipgroup_route
 from functions.blacklist.blacklist_functions import ips_between
-from functions.bulkblacklist.bulkblacklist_functions import process_ips_ajax
 
 from functions.mail.email_verification import (
     resend_email_verification_route,
@@ -51,6 +50,7 @@ from functions.dashboard.dashboard_ip_functions import (
     fetch_ips_stream_route,
     fetch_rdns_route,
     fetch_rdns_stream_route,
+    process_ips_ajax,
 )
 
 from functions.providers_data import providers_bulk
@@ -103,7 +103,7 @@ def add_no_cache_headers(response):
 # Main Entry Route
 @app.route("/", methods=["GET"])
 def index():
-    return render_template("index.html")
+    return render_template("index.html", result={})
 
 
 # Recaptcha Validation Route
@@ -164,7 +164,7 @@ def get_ips():
 
 @app.route("/bulk-blacklist", methods=["GET", "POST"])
 def bulkblacklist():
-    return render_template("bulkblacklist.html")
+    return render_template("bulkblacklist.html", result={"fetched": False})
 
 
 @app.route("/bulk-blacklist-stream", methods=["GET", "POST"])
@@ -173,7 +173,7 @@ def bulkblacklist_ajax_stream():
     ips = session.get("ips")
     row = []
 
-    return process_ips_ajax(ips, row, providers_bulk)
+    return process_ips_ajax(ips, row, providers_bulk, "non-fetching")
 
 
 @app.route("/get-bulkblacklist-table-template", methods=["POST"])

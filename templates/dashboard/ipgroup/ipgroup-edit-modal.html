@@ -1,0 +1,27 @@
+<!-- edit group -->
+<div class="modal fade" id="editModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="{{url_for('update_ipgroup')}}" method="post" id="ipgroup-edit-form">
+                <div class="modal-header">
+                    <h5 class="modal-title d-flex align-items-center"><i class="bi bi-person-circle fs-3 me-2"></i>Edit Group</h5>
+                    <button type="reset" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <div>
+                            <label class="form-label">Edit Group</label>
+                            <input type="text" id="old_name" name="old_name" style="display: none" />
+                            <input type="text" id="new_name" name="new_name" />
+                        </div>
+                    </div>
+                    <div class="login-b">
+                        <button onclick="handleFormSubWithRecaptcha(event, 'ipgroup-edit-form')" class="search-button1" data-bs-toggle="modal" data-bs-target="#editModal">
+                            Save Group Name
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

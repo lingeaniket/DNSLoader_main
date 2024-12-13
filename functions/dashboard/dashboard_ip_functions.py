@@ -10,34 +10,80 @@ from flask import (
     copy_current_request_context,
 )
 from flask_mysqldb import MySQL
+from functions.bulkblacklist.bulkblacklist_functions import process_ip
+from functions.mail.send_email import send_email_route
 from functions.providers_data import providers_bulk
-from functions.bulkblacklist.bulkblacklist_functions import (
-    process_ips_ajax,
-)
+
 
 mysql = MySQL()
 
 
-def get_ips_for_fetch_route():
-    mycursor = mysql.connection.cursor()
+def process_ips_ajax(ip_list, row, providers_bulk, type):
 
-    mycursor.execute(
-        """SELECT * FROM tblips
-            WHERE ownerid = {user_id}
-            ORDER BY time(ip_updated_at)
-            LIMIT 100"""
+    user_id = session.get("user_id")
+
+    @copy_current_request_context
+    def update_db(result):
+        date = datetime.datetime.today()
+        recent_date = date.strftime("%Y-%m-%d %H:%M:%S")
+
+        try:
+            with mysql.connection.cursor() as cursor:
+                query = """
+                    UPDATE tblips SET
+                     status=last_status, status = %s, updated_at = %s, ip_updated_at=%s
+                    WHERE ownerid = %s AND ipaddress = %s
+                """
+                status = (
+                    "Blacklisted" if result["result"]["is_blacklisted"] else "Clean"
+                )
+                cursor.execute(
+                    query, (status, recent_date, recent_date, user_id, result["ip"])
+                )
+                mysql.connection.commit()
+        except mysql.OperationalError as e:
+            print(f"Database operation failed: {e}")
+
+    count = {}
+
+    # map over each provider in providers_bulk
+    for provider in providers_bulk:
+        provider = provider["provider"]
+        # count[provider["provider"]] as provider is a object and has provider name in its "provider" property
+        count[provider] = 0
+
+    def get_results():
+        with ThreadPoolExecutor(max_workers=10) as executor:
+            # Submit each IP processing to the executor
+            # call the process_ip with ip, row, providers_bulk as a parameter
+            futures = [
+                executor.submit(process_ip, ip, row, providers_bulk) for ip in ip_list
+            ]
+
+            # Collect results as they complete
+            for future in as_completed(futures):
+                result = future.result()
+                if result:
+                    # time.sleep(1)
+                    # print(count)
+                    for provider in providers_bulk:
+                        provider = provider["provider"]
+                        if provider in result["result"]["detected_on"]:
+                            count[provider] += 1
+                    newdata = {
+                        "data": result,
+                        "count": count,
+                    }
+                    if type == "fetching":
+                        update_db(result)
+
+                    yield f"data: {json.dumps(newdata)}\n\n"
+
+    return Response(
+        get_results(),
+        content_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "Connection": "keep-alive"},
     )
-
-    mycursor.connection.commit()
-
-    ips = []
-    ipslist = mycursor.fetchall()
-    for ip in ipslist:
-        ips.append(ip[1])
-
-    session["ips"] = ips
-
-    return {"ips": ips}
 
 
 def fetch_ips_stream_route():
@@ -46,7 +92,7 @@ def fetch_ips_stream_route():
     mycursor = mysql.connection.cursor()
     # execute the query, get ips of respected user, order by ip_Updated_at as ascending and get first 100 results
     mycursor.execute(
-        f"""SELECT * FROM tblips WHERE ownerid = {user_id} ORDER BY time(ip_updated_at) LIMIT 100"""
+        f"""SELECT * FROM tblips WHERE ownerid = {user_id} ORDER BY ip_updated_at LIMIT 100"""
     )
 
     # store them as non-updated ips
@@ -61,7 +107,9 @@ def fetch_ips_stream_route():
     # create a new variable to store result
     row = []
     # call the process_ips function, send ips list, row, and providers_bulk
-    return process_ips_ajax(to_update_ips, row, providers_bulk, "fetching")
+    proceesedData = process_ips_ajax(to_update_ips, row, providers_bulk, "fetching")
+    send_email_route()
+    return proceesedData
 
 
 def fetch_ips_route():
@@ -71,7 +119,7 @@ def fetch_ips_route():
     mycursor = mysql.connection.cursor()
     # execute the query, get ips of respected user, order by ip_Updated_at as ascending and get first 100 results
     mycursor.execute(
-        f"""SELECT * FROM tblips WHERE ownerid = {user_id} ORDER BY time(ip_updated_at) LIMIT 100"""
+        f"""SELECT * FROM tblips WHERE ownerid = {user_id} ORDER BY ip_updated_at LIMIT 100"""
     )
 
     if request.method == "POST":
@@ -86,8 +134,6 @@ def fetch_ips_route():
 
 
 # FETCH RDNS FUNCTIONS ###########
-
-
 def reverse_DNS(ip, type):
     try:
         if type == "custom":
@@ -103,12 +149,10 @@ def lookup(ip):
 
 
 def process_rdns_ajax(ip_list):
-
     user_id = session.get("user_id")
 
     @copy_current_request_context
     def update_db(result):
-
         date = datetime.datetime.today()
         recent_date = date.strftime("%Y-%m-%d %H:%M:%S")
 
@@ -153,7 +197,7 @@ def fetch_rdns_stream_route():
     mycursor.execute(
         f"""SELECT * FROM tblips
             WHERE ownerid={user_id}
-            ORDER BY time(rdns_updated_at)
+            ORDER BY rdns_updated_at
             LIMIT 100"""
     )
 
@@ -173,7 +217,7 @@ def fetch_rdns_route():
     mycursor.execute(
         f"""SELECT * FROM tblips
             WHERE ownerid={user_id}
-            ORDER BY time(rdns_updated_at)
+            ORDER BY rdns_updated_at
             LIMIT 100"""
     )
 

@@ -15,6 +15,8 @@ def ips_add_csv_route():
         # get owner_id from session
         owner_id = session.get("user_id")
 
+        print(file)
+
         # if file is there in form data
         if file:
             # convert file to object, as column name as key and rows data as a value
@@ -31,6 +33,7 @@ def ips_add_csv_route():
             else:
                 comments = [None for _ip_ in df["IP"].to_list()]
 
+            print(ips)
             # initialize the cursor
             mycursor = mysql.connection.cursor()
 

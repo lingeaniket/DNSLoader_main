@@ -9,7 +9,7 @@ from functions.blacklist.blacklist_functions import check_dnsbl_providers, is_va
 
 def blacklist_route():
     if request.method == "GET":
-        return render_template("blacklist.html", result={"data": False})
+        return render_template("blacklist.html", result={"fetched": False})
     elif request.method == "POST":
         # defined variables
         ip = ""  # ip/domain to check for blacklist
@@ -26,16 +26,16 @@ def blacklist_route():
                 # return result with result and given query
                 return render_template(
                     "blacklist.html",
-                    result={"result": result, "query": ip, "data": True},
+                    result={"result": result, "query": ip, "fetched": True},
                 )
             # if ip is not available then return empty object
             else:
-                return render_template("blacklist.html", result={"data": True})
+                return render_template("blacklist.html", result={"fetched": True})
 
         except Exception as e:
             print(e)
             # if there is error in execution return query and error message
             return render_template(
                 "blacklist.html",
-                result={"error": "Error in  blacklist", "query": ip, "data": True},
+                result={"error": "Error in  blacklist", "query": ip, "fetched": True},
             )

@@ -71,7 +71,7 @@ def get_ssl_certificate(host):
 def getsslchecker_route():
     # if method is "GET", render template
     if request.method == "GET":
-        return render_template("sslchecker.html", result={})
+        return render_template("sslchecker.html", result={"fetched": False})
     elif request.method == "POST":
         ssl_certificate = {}  # create a ssl_certificate object to store the data
         ssl_certificate["timeofcompletion"] = str(datetime.datetime.now())[:19]
@@ -91,7 +91,7 @@ def getsslchecker_route():
             if not host:
                 return render_template(
                     "sslchecker.html",
-                    result={"error": "Host field is required."},
+                    result={"error": "Host field is required.", "fetched": True},
                 )
 
             # check if dns resolve the host
@@ -102,7 +102,11 @@ def getsslchecker_route():
                 ssl_certificate["domain_error"] = True  # set domain error as True
                 return render_template(
                     "sslchecker.html",
-                    result={"certificate": ssl_certificate, "query": domain_host},
+                    result={
+                        "certificate": ssl_certificate,
+                        "query": domain_host,
+                        "fetched": True,
+                    },
                 )
 
             # if any exception is raised during execution
@@ -110,7 +114,11 @@ def getsslchecker_route():
                 ssl_certificate["domain_error"] = True  # set domain error as True
                 return render_template(
                     "sslchecker.html",
-                    result={"certificate": ssl_certificate, "query": domain_host},
+                    result={
+                        "certificate": ssl_certificate,
+                        "query": domain_host,
+                        "fetched": True,
+                    },
                 )
 
             # if everything is fine, call get_ssl_certificate and get the certificate
@@ -125,6 +133,7 @@ def getsslchecker_route():
                     result={
                         "error": "Your SSL certificate does not match your domain name!",
                         "query": host,
+                        "fetched": True,
                     },
                 )
 
@@ -135,12 +144,20 @@ def getsslchecker_route():
             query = f"http{'s' if ssl_certificate["https_forced"] else ''}://{host}"
             return render_template(
                 "sslchecker.html",
-                result={"certificate": ssl_certificate, "query": query},
+                result={
+                    "certificate": ssl_certificate,
+                    "query": query,
+                    "fetched": True,
+                },
             )
         # If any error during execution
         except Exception as e:
             print(e)
             return render_template(
                 "sslchecker.html",
-                result={"certificate": ssl_certificate, "query": domain_host},
+                result={
+                    "certificate": ssl_certificate,
+                    "query": domain_host,
+                    "fetched": True,
+                },
             )

@@ -6,9 +6,9 @@
         <meta name="google-site-verification" content="KT1vYcx6FizmYDtY8Xa0-5Vx5zyz1jCJ4rfW_ylOPZA" />
         <!-- Title Block -->
         {%block title%} {%endblock%}
+        <script src="static/js/scripts/tools.js"></script>
         <!-- Script Block -->
         {%block script%}{%endblock%}
-        <!-- <script src="static/"></script> -->
         {%include 'headlink.html' %}
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     </head>
@@ -16,7 +16,7 @@
         {% include 'header.html' %}
         <main class="main">
             <!-- Hero Section -->
-            <section id="hero" class="hero section">
+            <section id="hero" class="hero section {{'searched' if result.fetched else ''}}">
                 <div class="container d-flex flex-column align-items-center">
                     <!-- Page Form -->
                     {%block form%}{%endblock%}

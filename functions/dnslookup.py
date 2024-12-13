@@ -7,7 +7,7 @@ from flask import render_template, request
 
 def dnslookup_route():
     if request.method == "GET":
-        return render_template("dns-lookup.html", result={})
+        return render_template("dns-lookup.html", result={"fetched": False})
     elif request.method == "POST":
         # define the variables
         myresult = []  # variable for end result
@@ -27,7 +27,11 @@ def dnslookup_route():
             # return error with error message
             return render_template(
                 "dns-lookup.html",
-                result={"error": f"No DNS records found for {domain}", "query": domain},
+                result={
+                    "error": f"No DNS records found for {domain}",
+                    "query": domain,
+                    "fetched": True,
+                },
             )
         except dns.resolver.NXDOMAIN:  # means domain not exist
             print(f"Domain {domain} does not exist")
@@ -38,12 +42,13 @@ def dnslookup_route():
                     result={
                         "error": f"Domain {domain} does not exist",
                         "query": domain,
+                        "fetched": True,
                     },
                 )
             else:  # means domain is empty string
                 return render_template(
                     "dns-lookup.html",
-                    result={},
+                    result={"fetched": True},
                 )
         except Exception as e:  # exception while processing
             print(f"Error: {e}")
@@ -51,12 +56,21 @@ def dnslookup_route():
                 # return error message
                 return render_template(
                     "dns-lookup.html",
-                    result={"error": "Given domain is not valid", "query": domain},
+                    result={
+                        "error": "Given domain is not valid",
+                        "query": domain,
+                        "fetched": True,
+                    },
                 )
             else:  # means domain is empty string
-                return render_template("dns-lookup.html", result={})
+                return render_template("dns-lookup.html", result={"fetched": True})
         # return template with results, domain and query
         return render_template(
             "dns-lookup.html",
-            result={"results": myresult, "domain": domain, "query": domain},
+            result={
+                "results": myresult,
+                "domain": domain,
+                "query": domain,
+                "fetched": True,
+            },
         )
