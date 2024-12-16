@@ -314,7 +314,7 @@ def edit_ip():
     return edit_ip_route()
 
 
-# Dashboard IP Groups Route
+# Dashboard IP Groups
 @app.route("/dashboard-ipgroup", methods=["POST", "GET"])
 @login_required
 def dashboard_ipgroup():
