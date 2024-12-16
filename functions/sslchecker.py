@@ -141,13 +141,13 @@ def getsslchecker_route():
             ssl_certificate["timeofcompletion"] = str(datetime.datetime.now())[:19]
 
             # create a query based on https_forced
-            query = f"http{'s' if ssl_certificate["https_forced"] else ''}://{host}"
+            query = f"http{'s' if ssl_certificate['https_forced'] else ''}://{host}"
             return render_template(
                 "sslchecker.html",
                 result={
                     "certificate": ssl_certificate,
                     "query": query,
-                    "fetched": True,
+                    "fetched": True, 
                 },
             )
         # If any error during execution

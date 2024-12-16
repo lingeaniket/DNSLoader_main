@@ -43,11 +43,11 @@ def send_email_route():
         df.to_csv(csv_buffer, index=False)
 
         # Get the CSV content as a string
-        csv_content = csv_buffer.getvalue()
+        csv_content = csv_buffer.getvalue()    
 
         # email id and information
         query = f"SELECT *FROM tblusers WHERE id='{user_id}'"
-        mycursor.execute(query)
+        mycursor.execute(query) 
         result = mycursor.fetchall()
 
         if result:
